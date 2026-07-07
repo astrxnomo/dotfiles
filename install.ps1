@@ -9,15 +9,29 @@ function Link-Config($target, $source) {
     if (-not (Test-Path $dir)) {
         New-Item -ItemType Directory -Force -Path $dir | Out-Null
     }
-    if (Test-Path $target) {
+
+    $existing = Get-Item -Path $target -Force -ErrorAction SilentlyContinue
+    if ($existing -and $existing.LinkType -eq "SymbolicLink") {
         Remove-Item $target -Force -Recurse
+        $existing = $null
     }
-    New-Item -ItemType SymbolicLink -Path $target -Target $source | Out-Null
+
+    try {
+        New-Item -ItemType SymbolicLink -Path $target -Target $source -ErrorAction Stop | Out-Null
+    } catch {
+        Write-Warning "Failed to link $target -> $source ($($_.Exception.Message))"
+        return
+    }
+
     Write-Output "Linked $target -> $source"
 }
 
 Link-Config "$env:USERPROFILE\.wezterm.lua" "$repo\wezterm\.wezterm.lua"
 Link-Config "$env:USERPROFILE\.config\oh-my-posh\material.omp.json" "$repo\oh-my-posh\material.omp.json"
 Link-Config $PROFILE "$repo\powershell\Microsoft.PowerShell_profile.ps1"
+Link-Config "$env:USERPROFILE\.claude\settings.json" "$repo\claude\settings.json"
+Link-Config "$env:USERPROFILE\.claude\CLAUDE.md" "$repo\claude\CLAUDE.md"
+Link-Config "$env:USERPROFILE\.claude\rules" "$repo\claude\rules"
+Link-Config "$env:USERPROFILE\.claude\skills" "$repo\claude\skills"
 
-Write-Output "`nDone. Make sure these are installed: WezTerm, Oh My Posh (winget install JanDeDobbeleer.OhMyPosh), JetBrainsMono Nerd Font."
+Write-Output "`nDone. Make sure these are installed: WezTerm, Oh My Posh (winget install JanDeDobbeleer.OhMyPosh), JetBrainsMono Nerd Font, Claude Code."
