@@ -9,7 +9,7 @@ Personal config files, symlinked into place from here so they stay in sync acros
 - `powershell/Microsoft.PowerShell_profile.ps1` — PowerShell profile (Oh My Posh init + Linux-style aliases)
 - `claude/settings.json` — Claude Code global settings (model, hooks, enabled plugins)
 - `claude/CLAUDE.md` — Claude Code global instructions (reglas de commits, puntero a skills personales)
-- `claude/rules/` — Claude Code global rules (Context7 usage)
+- `claude/hooks/` — Claude Code hooks (bloquea `Co-Authored-By: Claude` en commits vía PreToolUse, en vez de confiar solo en CLAUDE.md)
 - `claude/skills/` — Personal Claude Code skills:
   - `context7-mcp`, `felipego-projects` — proyecto-específicas
   - `browser-verify` — testear una feature con Claude in Chrome o Playwright

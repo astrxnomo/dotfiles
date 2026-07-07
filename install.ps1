@@ -31,7 +31,7 @@ Link-Config "$env:USERPROFILE\.config\oh-my-posh\material.omp.json" "$repo\oh-my
 Link-Config $PROFILE "$repo\powershell\Microsoft.PowerShell_profile.ps1"
 Link-Config "$env:USERPROFILE\.claude\settings.json" "$repo\claude\settings.json"
 Link-Config "$env:USERPROFILE\.claude\CLAUDE.md" "$repo\claude\CLAUDE.md"
-Link-Config "$env:USERPROFILE\.claude\rules" "$repo\claude\rules"
 Link-Config "$env:USERPROFILE\.claude\skills" "$repo\claude\skills"
+Link-Config "$env:USERPROFILE\.claude\hooks" "$repo\claude\hooks"
 
 Write-Output "`nDone. Make sure these are installed: WezTerm, Oh My Posh (winget install JanDeDobbeleer.OhMyPosh), JetBrainsMono Nerd Font, Claude Code."

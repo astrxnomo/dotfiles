@@ -4,6 +4,17 @@
   },
   "model": "sonnet",
   "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$HOME/.claude/hooks/block-claude-coauthor.js\""
+          }
+        ]
+      }
+    ],
     "Notification": [
       {
         "hooks": [
@@ -37,7 +48,6 @@
   },
   "enabledPlugins": {
     "skill-creator@claude-plugins-official": true,
-    "warp@claude-code-warp": false,
     "context7@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true,
     "vercel@claude-plugins-official": true
