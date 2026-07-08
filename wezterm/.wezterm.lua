@@ -10,8 +10,7 @@ end
 config.font = wezterm.font("JetBrainsMono Nerd Font")
 config.font_size = 12
 
-config.color_scheme = "Black Metal (Bathory)"
-config.window_background_opacity = 1.0
+config.window_background_opacity = 0.95
 
 config.window_padding = {
   left = 8,
@@ -23,8 +22,39 @@ config.window_padding = {
 config.default_cursor_style = "BlinkingBar"
 config.scrollback_lines = 50000
 config.enable_scroll_bar = true
+
+-- Custom purple color scheme (matches the oh-my-posh prompt palette)
 config.colors = {
-  scrollbar_thumb = "#555555",
+  foreground = "#E0D6F5",
+  background = "#05030A",
+  cursor_bg = "#C792EA",
+  cursor_border = "#C792EA",
+  cursor_fg = "#1A1025",
+  selection_bg = "#4B2E83",
+  selection_fg = "#E0D6F5",
+  scrollbar_thumb = "#5C3D7A",
+  split = "#4B2E83",
+
+  ansi = {
+    "#241733", -- black
+    "#E0A6E8", -- red
+    "#7FDBAA", -- green
+    "#F5D76E", -- yellow
+    "#7C7CE0", -- blue
+    "#C792EA", -- magenta
+    "#63D9E0", -- cyan
+    "#E0D6F5", -- white
+  },
+  brights = {
+    "#4B3B5C", -- bright black
+    "#F5B8E8", -- bright red
+    "#9CFFC7", -- bright green
+    "#FFEB99", -- bright yellow
+    "#A6A6FF", -- bright blue
+    "#E0A6E8", -- bright magenta
+    "#9CF0F5", -- bright cyan
+    "#FFFFFF", -- bright white
+  },
 }
 
 config.window_decorations = "TITLE | RESIZE"
@@ -33,29 +63,30 @@ config.use_fancy_tab_bar = false
 config.tab_bar_at_bottom = false
 config.tab_max_width = 20
 
--- Tab bar colors (fine-tuned contrast on top of the color_scheme)
+-- Tab bar colors (matches the purple color scheme above)
 config.colors.tab_bar = {
+  background = "#05030A",
   active_tab = {
-    bg_color = "#3a3a3a",
-    fg_color = "#ffffff",
+    bg_color = "#4B2E83",
+    fg_color = "#F5EBFF",
     intensity = "Bold",
   },
   inactive_tab = {
-    bg_color = "#1a1a1a",
-    fg_color = "#808080",
+    bg_color = "#05030A",
+    fg_color = "#8A6FA8",
   },
   inactive_tab_hover = {
-    bg_color = "#2a2a2a",
-    fg_color = "#c0c0c0",
+    bg_color = "#2E1D47",
+    fg_color = "#C792EA",
     italic = true,
   },
   new_tab = {
-    bg_color = "#1a1a1a",
-    fg_color = "#808080",
+    bg_color = "#05030A",
+    fg_color = "#8A6FA8",
   },
   new_tab_hover = {
-    bg_color = "#2a2a2a",
-    fg_color = "#c0c0c0",
+    bg_color = "#2E1D47",
+    fg_color = "#C792EA",
   },
 }
 

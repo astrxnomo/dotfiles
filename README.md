@@ -19,6 +19,7 @@ Personal config files, symlinked into place from here so they stay in sync acros
   - `challenge-my-plan` — interrogar un plan/decisión hasta resolver toda ambigüedad
   - `webapp-blueprint` — blueprint de referencia para apps web (auth, dashboard, CRUD)
   - `notion-mcp` — fuerza el uso del servidor MCP de Notion para cualquier operación en Notion
+  - `project-hub` — gestión de proyectos y tareas del usuario en el "Project Hub" de Notion (crear/mover tareas, registrar decisiones, reportar avance)
 
 ## Setup on a new PC
 

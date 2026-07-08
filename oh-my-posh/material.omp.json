@@ -5,13 +5,13 @@
       "alignment": "left",
       "segments": [
         {
-          "foreground": "#69FF94",
+          "foreground": "#C792EA",
           "style": "plain",
           "template": "\u276f",
           "type": "text"
         },
         {
-          "foreground": "#56B6C2",
+          "foreground": "#B084F5",
           "options": {
             "style": "folder"
           },
@@ -20,13 +20,13 @@
           "type": "path"
         },
         {
-          "foreground": "#D0666F",
+          "foreground": "#E0A6E8",
           "options": {
             "branch_icon": "",
             "fetch_status": false
           },
           "style": "plain",
-          "template": "<#5FAAE8>git:(</>{{ .HEAD }}<#5FAAE8>)</> ",
+          "template": "<#9D65E0>git:(</>{{ .HEAD }}<#9D65E0>)</> ",
           "type": "git"
         }
       ],
