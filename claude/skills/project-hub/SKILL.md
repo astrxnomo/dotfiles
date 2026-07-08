@@ -8,9 +8,12 @@ Sistema central de gestión de proyectos del usuario en Notion. Usa siempre el M
 ## Estructura (IDs fijos)
 
 - **Página raíz "🗂️ Project Hub"**: `39623bce-2002-8127-9fba-cd7f2010ddbc`
+- **BD `Áreas`** (a qué pertenece cada proyecto; cada fila enlaza a su página-hub real):
+  - data_source_id: `6a900b74-a367-466a-809d-9dd724bf6197`
+  - Filas: `Personal`, `Centro Prototipado`. Propiedad: `Área` (title).
 - **BD `Proyectos`** (contexto y estado de cada proyecto):
   - data_source_id: `0a0e4792-4f66-422e-875e-146a3cb06987`
-  - Propiedades: `Project name` (title), `Status` (Backlog/Planning/In progress/Paused/Done/Cancelled), `Área` (select: Personal/Centro Prototipado — a qué pertenece el proyecto), `Dates` (fecha del proyecto), `Tareas` (relación → Tareas)
+  - Propiedades: `Project name` (title), `Status` (Backlog/Planning/In progress/Paused/Done/Cancelled), `Área` (relación → Áreas), `Dates` (fecha del proyecto), `Tareas` (relación → Tareas)
   - El **cuerpo de la página** de cada proyecto lleva: Resumen/objetivo, Stack técnico, **Decisiones** (log cronológico fechado), Enlaces (repo, deploy).
 - **BD `Tareas`** (Kanban):
   - data_source_id: `1d5f2fde-e3d5-49f2-a5aa-ad72b76a6982`
