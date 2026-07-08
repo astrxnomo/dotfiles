@@ -47,6 +47,5 @@ Link-Config "$env:USERPROFILE\.claude\CLAUDE.md" "$repo\claude\CLAUDE.md"
 Get-ChildItem -Path "$repo\claude\skills" -Directory | ForEach-Object {
     Link-Config "$env:USERPROFILE\.claude\skills\$($_.Name)" $_.FullName
 }
-Link-Config "$env:USERPROFILE\.claude\hooks" "$repo\claude\hooks"
 
 Write-Output "`nDone. Make sure these are installed: WezTerm, Oh My Posh (winget install JanDeDobbeleer.OhMyPosh), JetBrainsMono Nerd Font, Claude Code."
