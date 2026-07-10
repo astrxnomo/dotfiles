@@ -41,6 +41,7 @@ Para activar una en un proyecto, en su `.claude/settings.json`:
 
 - **MCP:** todas las integraciones externas (Notion, Context7, Vercel) se acceden vía **Executor** (`mcp__executor__execute`), un único servidor MCP hosteado en executor.sh que centraliza las conexiones y permite múltiples cuentas por integración (2 workspaces de Notion, 2 cuentas de Vercel, etc.). Las conexiones se gestionan en el dashboard de Executor, no en este repo. El servidor `executor` vive en `~/.claude.json` (no symlinkable) — `install.ps1` lo registra con `claude mcp add`; la primera vez se autoriza con `/mcp`.
 - **Plugins:** solo se usa **`superpowers`**. Los plugins no viven en el repo (se instalan en el store de Claude Code); `install.ps1` corre `claude plugin install superpowers@claude-plugins-official`.
+- **Limpieza:** al final, `install.ps1` deja Claude en este baseline exacto. Detecta lo que sobra en la otra PC (plugins ≠ superpowers, MCP ≠ executor, skills sueltas en `~/.claude/skills`, y `rules`/`settings.local.json` no gestionados), muestra el plan y pide **una sola confirmación** (default No) antes de borrar. Si no hay nada fuera del baseline, no pregunta.
 
 ## Instalación en una PC nueva
 
