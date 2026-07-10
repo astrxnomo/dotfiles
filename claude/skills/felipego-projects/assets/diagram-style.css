@@ -29,7 +29,7 @@
 
 *{box-sizing:border-box}
 body{
-  margin:0;padding:22px 12px;
+  margin:0;padding:4px 8px;
   font-family:var(--font-sans),Outfit,ui-sans-serif,system-ui,sans-serif;
   color:var(--foreground);background:transparent;
   font-size:14px;line-height:1.5;letter-spacing:-.006em;
@@ -41,9 +41,10 @@ body{
  * that content is wider than the viewport, so nothing deforms. Setting
  * overflow-x also forces overflow-y to compute as clipped (CSS spec quirk),
  * which would slice off .tier-lbl's badge (it intentionally pokes above its
- * box on negative top) and node hover shadows — the vertical padding below
- * gives both room so the forced vertical clip never actually touches them */
-.d{max-width:760px;margin:0 auto;padding:14px 2px 8px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+ * box on negative top) and node hover shadows — kept to the minimum (10px)
+ * that still clears the badge's -9px poke, since the surrounding page's own
+ * block spacing (heading margins etc.) already provides the visual rhythm */
+.d{max-width:760px;margin:0 auto;padding:10px 2px 4px;overflow-x:auto;-webkit-overflow-scrolling:touch}
 
 /* generic building blocks */
 .mono{font-family:var(--font-mono),"JetBrains Mono",ui-monospace,monospace;font-feature-settings:"liga" 0;letter-spacing:0}
