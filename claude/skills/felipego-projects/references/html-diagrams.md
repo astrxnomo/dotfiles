@@ -9,21 +9,23 @@ the **default** way to illustrate a project's architecture and request flow
 (replacing static diagram images), and the general mechanism for any
 interactive widget a project write-up wants.
 
-This reference is the whole workflow: the shared CSS kit, the three standard
-diagram shapes, how to build/preview/ship a diagram, and when Mermaid is still
-the better choice.
+This reference is the whole workflow: the shared CSS kit, the icon sprite, the
+standard diagram shapes (grouped-tier architecture is the default), how to
+build/preview/ship a diagram, and when Mermaid is still the better choice.
 
 ## Why a shared kit, not bespoke CSS per project
 
 "In felipego.com style" means every project's diagrams should look like **one
 consistent system**, not each project inventing its own box-and-arrow styling.
 `assets/diagram-style.css` is that one system: a small set of classes
-(`.node`, `.arrow`, the branch connectors `.fork`/`.merge`/`.bus`, `.step`,
-`.tool`, `.grid`, `.route`, `.mono`, `.center`, `.row`, `button.kit`), each
-styled only with the site's CSS variables. You author the **content** per
-project (labels, structure, counts) but never the **style** —
-`scripts/wrap-diagram.mjs` inlines the shared CSS for you, so it can't drift
-between projects.
+(`.tier`/`.tier-lbl`/`.tier-link`, `.node`/`.ic`, the branch connectors
+`.fork`/`.merge`/`.bus`, `.arrow`, `.step`, `.tool`, `.grid`, `.route`,
+`.mono`, `.center`, `.row`, `button.kit`), each styled only with the site's
+CSS variables. `assets/icons.svg` is the matching icon sprite — a fixed set of
+line icons for common architecture concepts (browser, server, database…). You
+author the **content** per project (labels, structure, which icon fits) but
+never the **style** — `scripts/wrap-diagram.mjs` inlines both the shared CSS
+and the icon sprite for you, so neither can drift between projects.
 
 Two things the kit does that are easy to miss but matter a lot for how solid
 the diagrams read:
@@ -42,16 +44,70 @@ the diagrams read:
 Read `assets/diagram-style.css` for the exact class list and the full CSS-variable
 reference in its header comment before authoring a diagram body.
 
-## The three standard shapes
+## The icon sprite
+
+`assets/icons.svg` is a fixed set of line icons, auto-inlined into every
+diagram by `scripts/wrap-diagram.mjs`. Use one as a node's first child:
+
+```html
+<div class="node"><span class="ic"><svg><use href="#i-server"/></svg></span><div><div class="t">API</div><div class="s">REST</div></div></div>
+```
+
+Available ids: `i-browser`, `i-user`, `i-users`, `i-mobile`, `i-server`,
+`i-api`, `i-cpu` (agent/compute), `i-database`, `i-cache`, `i-cloud`
+(external API/LLM), `i-queue`, `i-webhook`, `i-lock`, `i-file`, `i-terminal`,
+`i-mail`, `i-chart`, `i-bot`, `i-bucket` (object storage), `i-search`,
+`i-gear`, `i-globe`, `i-clock` (cron/scheduler), `i-key` (API key/auth).
+
+Pick the **closest match** — this is a fixed list, the same way `tags` is a
+fixed option list in Notion, so every project's diagrams draw from the same
+visual vocabulary. If a node genuinely has no good match, it's fine to omit
+the `.ic` span entirely (a plain text node is still valid). Don't invent a
+one-off inline `<svg>` per diagram; if a repo's architecture needs a concept
+that's missing, add it to `assets/icons.svg` once so it's available to every
+future project, rather than duplicating a bespoke icon inline.
+
+## The standard shapes
 
 Pick whichever matches what you're depicting — don't force a shape that doesn't fit.
 
-### 1. Layered architecture (`.node` / `.arrow` / `.fork` / `.merge` / `.bus`)
+### 1. Grouped-tier architecture (default) — `.tier` / `.node` / `.ic`
 
-Stacked boxes connected by vertical arrows, optionally with two boxes
-side-by-side in a `.row` (two front doors into the same layer, for example).
-Give the most important shared layer (e.g. a shared analytics/service module)
-the `.accent` class so it stands out.
+The default shape for Architecture diagrams: a dashed group box per layer
+(e.g. Client / Application / Data) labeled with `.tier-lbl`, each containing
+one or more `.row` of icon `.node`s, joined tier-to-tier by a simple
+`.tier-link`. This is what makes a diagram read as real system-design
+architecture instead of a plain stack of boxes. Give the most important
+shared layer (e.g. a shared analytics/service module, or the primary
+datastore) the `.accent` class so it stands out.
+
+```html
+<div class="d">
+  <div class="tier"><span class="tier-lbl">Client</span>
+    <div class="node"><span class="ic"><svg><use href="#i-browser"/></svg></span><div><div class="t">Browser</div><div class="s">Web chat + inline chart renderer</div></div></div>
+  </div>
+  <div class="tier-link"></div>
+  <div class="tier"><span class="tier-lbl">Application</span>
+    <div class="row">
+      <div class="node"><span class="ic"><svg><use href="#i-api"/></svg></span><div><div class="t">API</div><div class="s mono">/api/v1</div></div></div>
+      <div class="node"><span class="ic"><svg><use href="#i-cpu"/></svg></span><div><div class="t">Agent</div><div class="s">authored tools + skills</div></div></div>
+    </div>
+  </div>
+  <div class="tier-link"></div>
+  <div class="tier"><span class="tier-lbl">Data</span>
+    <div class="row">
+      <div class="node accent"><span class="ic"><svg><use href="#i-database"/></svg></span><div><div class="t mono">Postgres</div><div class="s">shared datastore</div></div></div>
+      <div class="node"><span class="ic"><svg><use href="#i-cloud"/></svg></span><div><div class="t">LLM</div><div class="s">external API</div></div></div>
+    </div>
+  </div>
+</div>
+```
+
+If a tier-to-tier transition needs a protocol label, nest a label pill just
+before the `.tier-link` (same convention as the branch connectors below):
+`<div class="clbl-wrap"><span class="clbl mono">HTTP</span></div>`.
+
+#### Fan-out between tiers (`.fork` / `.merge` / `.bus`)
 
 **Show the connections, don't just point down.** A single centered `.arrow`
 between a node and a `.row` of children hides *which* box feeds *which*. Use
@@ -80,20 +136,26 @@ them (the wrap script's authored bodies do this automatically).
 
 ```html
 <div class="d">
-  <div class="node center"><div class="t">Browser</div><div class="s">Web chat + inline chart renderer</div></div>
-  <!-- one node fans out to two → .fork with --n:2 (label pill above it) -->
+  <div class="tier"><span class="tier-lbl">Client</span>
+    <div class="node"><span class="ic"><svg><use href="#i-browser"/></svg></span><div><div class="t">Browser</div><div class="s">Web chat + inline chart renderer</div></div></div>
+  </div>
+  <!-- one tier fans out to two nodes in the next → .fork with --n:2 (label pill above it) -->
   <div class="clbl-wrap"><span class="clbl mono">/api/v1/*  ·  HTTP</span></div>
   <div class="fork" style="--n:2"><i></i><i></i></div>
-  <div class="row">
-    <div class="node center"><div class="t">agent</div><div class="s">authored tools + skills</div></div>
-    <div class="node center"><div class="t mono">REST API</div><div class="s mono">/api/*</div></div>
+  <div class="tier"><span class="tier-lbl">Application</span>
+    <div class="row">
+      <div class="node"><span class="ic"><svg><use href="#i-cpu"/></svg></span><div><div class="t">Agent</div><div class="s">authored tools + skills</div></div></div>
+      <div class="node"><span class="ic"><svg><use href="#i-api"/></svg></span><div><div class="t mono">REST API</div><div class="s mono">/api/*</div></div></div>
+    </div>
+    <!-- two boxes converge into the shared layer → .merge with --n:2 -->
+    <div class="merge" style="--n:2"><i></i><i></i></div>
+    <div class="node accent"><span class="ic"><svg><use href="#i-file"/></svg></span><div><div class="t mono">lib/shared.ts</div><div class="s">one shared library — same functions for both front doors</div></div></div>
   </div>
-  <!-- two boxes converge into the shared layer → .merge with --n:2 -->
-  <div class="merge" style="--n:2"><i></i><i></i></div>
-  <div class="node center accent"><div class="t mono">lib/shared.ts</div><div class="s">one shared library — same functions for both front doors</div></div>
   <!-- true 1→1 hop → keep a plain .arrow -->
   <div class="arrow"><span class="lbl mono">SQL</span><span class="line"></span><span class="chev">▼</span></div>
-  <div class="node center"><div class="t">Postgres</div><div class="s">…</div></div>
+  <div class="tier"><span class="tier-lbl">Data</span>
+    <div class="node"><span class="ic"><svg><use href="#i-database"/></svg></span><div><div class="t">Postgres</div><div class="s">…</div></div></div>
+  </div>
 </div>
 ```
 
@@ -123,9 +185,9 @@ with a name, one-line description, and an optional route/tag badge.
 
 ```html
 <div class="d"><div class="grid">
-  <div class="tool"><div class="n">get_summary</div><div class="dsc">plain-totals summary</div><span class="route">/api/summary</span></div>
-  <div class="tool"><div class="n">get_trend</div><div class="dsc">revenue/expense trend by month or department</div><span class="route">/api/trend</span></div>
-  <!-- one .tool per item -->
+  <div class="tool"><span class="ic"><svg><use href="#i-chart"/></svg></span><div class="n">get_summary</div><div class="dsc">plain-totals summary</div><span class="route">/api/summary</span></div>
+  <div class="tool"><span class="ic"><svg><use href="#i-chart"/></svg></span><div class="n">get_trend</div><div class="dsc">revenue/expense trend by month or department</div><span class="route">/api/trend</span></div>
+  <!-- one .tool per item; the .ic icon is optional, same sprite as .node -->
 </div></div>
 ```
 

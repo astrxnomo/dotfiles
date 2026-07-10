@@ -163,8 +163,9 @@ automatically. This is the default now, replacing static diagram images; native
 Mermaid remains an acceptable lighter-weight fallback (see
 `references/html-diagrams.md` for when).
 
-Full workflow, the three standard diagram shapes (layered architecture,
-numbered flow, card grid), and the exact script commands are all in
+Full workflow, the icon sprite, the standard diagram shapes (grouped-tier
+architecture is the default, plus numbered flow and card grid), and the exact
+script commands are all in
 **`references/html-diagrams.md`** — read it before authoring a diagram. In
 short:
 

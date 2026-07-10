@@ -18,8 +18,13 @@
  *   --accent-foreground --destructive --border --input --ring --radius
  *   --font-sans --font-serif --font-mono
  *
- * Classes: .node/.arrow (layered architecture) · .step/.num (numbered flow) ·
- * .tool/.grid/.route (card grid) · .mono .center .row · button.kit(.ghost)
+ * Classes: .tier/.tier-lbl/.tier-link + .node/.ic (grouped-tier architecture,
+ * the default shape) · .arrow/.fork/.merge/.bus (connectors) · .step/.num
+ * (numbered flow) · .tool/.grid/.route (card grid) · .mono .center .row ·
+ * button.kit(.ghost). Icons: assets/icons.svg (auto-inlined by
+ * wrap-diagram.mjs) — use <span class="ic"><svg><use href="#i-NAME"/></svg>
+ * </span> as a node's first child, picking the closest match from the fixed
+ * sprite (see references/html-diagrams.md for the icon list).
  */
 
 *{box-sizing:border-box}
@@ -30,29 +35,82 @@ body{
   font-size:14px;line-height:1.5;letter-spacing:-.006em;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
 }
-.d{max-width:760px;margin:0 auto}
+/* the diagram scrolls horizontally as one unit rather than letting its
+ * boxes get squeezed illegibly on narrow/mobile viewports — every row's
+ * items keep a readable min-width (set below) and .d clips + scrolls once
+ * that content is wider than the viewport, so nothing deforms. Setting
+ * overflow-x also forces overflow-y to compute as clipped (CSS spec quirk),
+ * which would slice off .tier-lbl's badge (it intentionally pokes above its
+ * box on negative top) and node hover shadows — the vertical padding below
+ * gives both room so the forced vertical clip never actually touches them */
+.d{max-width:760px;margin:0 auto;padding:14px 2px 8px;overflow-x:auto;-webkit-overflow-scrolling:touch}
 
 /* generic building blocks */
 .mono{font-family:var(--font-mono),"JetBrains Mono",ui-monospace,monospace;font-feature-settings:"liga" 0;letter-spacing:0}
 .center{text-align:center}
 .row{display:flex;gap:12px;align-items:stretch}
 .row>*{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
+/* .node/.tool refuse to shrink below a readable width instead of squishing
+ * text — a wide row (e.g. 4 services) makes .d scroll instead of deforming.
+ * Only min-width changes here: flex-basis must stay 0% (inherited from
+ * .row>* above) so every column is exactly equal-width, which is what the
+ * .fork/.merge/.bus connectors' percentage-based leg math assumes — swapping
+ * in flex-basis:auto here once broke arrow alignment against uneven column
+ * widths (e.g. "auth" narrower than "catalog") */
+.row>.node,.row>.tool{min-width:168px}
+/* .node/.tool already define their own internal flex row (icon left, content
+ * right) — .row's column stacking is only for plain text blocks, so undo it
+ * here or a node dropped into a .row (e.g. a tier's side-by-side layer) would
+ * have its own icon+content stack vertically instead of staying side by side */
+.row>.node,.row>.tool{flex-direction:row}
 
-/* ── layered architecture: boxes + vertical connectors ── */
+/* ── architecture boxes + connectors ── */
 .node{
+  display:flex;align-items:center;gap:11px;
   background:var(--card);color:var(--card-foreground);
   border:1.5px solid var(--border);
   border-radius:calc(var(--radius,.5rem) + 3px);
-  padding:14px 16px;box-shadow:0 3px 0 0 var(--border);
+  padding:12px 14px;box-shadow:0 3px 0 0 var(--border);
   transition:transform .16s ease,box-shadow .16s ease;
 }
+.node>div{flex:1;min-width:0}
 .node:hover{transform:translateY(-2px);box-shadow:0 5px 0 0 var(--border)}
 .node .t{font-weight:650;font-size:14.5px;letter-spacing:-.012em;line-height:1.25}
 .node .s{font-size:12px;color:var(--muted-foreground);margin-top:4px;line-height:1.4}
 .node .t.mono,.node .s.mono{letter-spacing:0}
+/* optional icon slot — first child of .node, pick the closest match from
+ * the shared sprite (assets/icons.svg, auto-inlined by wrap-diagram.mjs):
+ * <span class="ic"><svg><use href="#i-server"/></svg></span> */
+.node .ic{
+  flex:none;width:34px;height:34px;border-radius:9px;
+  background:var(--muted);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+}
+.node .ic svg{width:19px;height:19px;stroke:var(--foreground);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 /* the emphasized shared layer */
 .accent{border:2px solid var(--primary);box-shadow:0 3px 0 0 var(--primary)}
 .accent:hover{box-shadow:0 5px 0 0 var(--primary)}
+.node.accent .ic{border-color:var(--primary)}
+
+/* ── grouped tiers (default architecture shape): a dashed group box per
+ * layer (Client / App / Data…) around one or more .row of .node, joined by
+ * .tier-link. For 1↔N or N↔N fan-out between tiers, drop a .fork/.merge/
+ * .bus (below) in place of .tier-link instead. ── */
+.tier{
+  border:1.5px dashed var(--border);border-radius:calc(var(--radius,.5rem) + 4px);
+  padding:14px 14px 15px;position:relative;
+}
+.tier+.tier{margin-top:28px}
+.tier-lbl{
+  position:absolute;top:-9px;left:15px;background:var(--background);
+  padding:0 8px;font-size:10.5px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted-foreground);
+}
+.tier .node{box-shadow:0 2px 0 0 var(--border)}
+.tier .node.accent{box-shadow:0 2px 0 0 var(--primary)}
+.tier .row+.row{margin-top:12px}
+.tier-link{width:2px;height:22px;background:linear-gradient(var(--border),var(--conn));margin:5px auto;position:relative}
+.tier-link::after{content:"";position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top:6px solid var(--conn);border-bottom:0}
 
 /* connector colour — a touch stronger than borders so lines read clearly */
 .d{--conn:var(--muted-foreground)}
@@ -116,14 +174,27 @@ body{
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
 @media(max-width:520px){.grid{grid-template-columns:1fr}}
 .tool{
+  display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:start;
   background:var(--card);border:1.5px solid var(--border);
   border-radius:calc(var(--radius,.5rem) + 3px);
   padding:13px 15px;box-shadow:0 3px 0 0 var(--border);
   transition:transform .16s ease,box-shadow .16s ease;
 }
 .tool:hover{transform:translateY(-2px);box-shadow:0 5px 0 0 var(--border)}
-.tool .n{font-family:var(--font-mono),"JetBrains Mono",monospace;font-size:13px;font-weight:600}
-.tool .dsc{font-size:12px;color:var(--muted-foreground);margin:6px 0 11px;line-height:1.45}
+/* optional icon, same sprite as .node .ic — sits left of the content,
+ * spanning every row in the card (name/desc/route stack in column 2) */
+.tool .ic{
+  grid-column:1;grid-row:1/-1;align-self:start;
+  width:30px;height:30px;border-radius:8px;
+  background:var(--muted);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+}
+.tool .ic svg{width:16px;height:16px;stroke:var(--foreground);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.tool .n{grid-column:2;font-family:var(--font-mono),"JetBrains Mono",monospace;font-size:13px;font-weight:600}
+.tool .dsc{grid-column:2;font-size:12px;color:var(--muted-foreground);margin:6px 0 11px;line-height:1.45}
+.tool .route{grid-column:2}
+/* no-icon cards: content simply occupies both columns */
+.tool:not(:has(.ic)) .n,.tool:not(:has(.ic)) .dsc,.tool:not(:has(.ic)) .route{grid-column:1/-1}
 .route{
   display:inline-block;font-size:11px;
   font-family:var(--font-mono),"JetBrains Mono",monospace;

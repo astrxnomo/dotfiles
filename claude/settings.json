@@ -1,12 +1,12 @@
 {
-  "permissions": {
-    "defaultMode": "auto"
-  },
-  "model": "sonnet",
   "attribution": {
     "commit": "",
     "pr": ""
   },
+  "permissions": {
+    "defaultMode": "auto"
+  },
+  "model": "sonnet",
   "hooks": {
     "Notification": [
       {
@@ -43,7 +43,10 @@
     "skill-creator@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true,
-    "vercel@claude-plugins-official": true
+    "vercel@claude-plugins-official": true,
+    "cloudinary@claude-plugins-official": true,
+    "cowork-plugin-management@inline": false,
+    "frontend-design@claude-plugins-official": false
   },
   "effortLevel": "medium",
   "autoUpdatesChannel": "latest",
