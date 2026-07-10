@@ -5,15 +5,15 @@ description: >
   Notion "Projects" (English) / "Proyectos" (Español) portfolio databases that
   power the site as a headless CMS. Driven by a single input: a GitHub repo URL.
   The workflow: generate a Mintlify wiki from the repo, read that wiki as the
-  source of truth, write rich English + Spanish project pages in Notion via the
-  Notion MCP, and illustrate them with interactive HTML-block diagrams styled
+  source of truth, write rich English + Spanish project pages in Notion via
+  Executor, and illustrate them with interactive HTML-block diagrams styled
   with felipego.com's own design system (falling back to native Mermaid when
   that's not warranted), plus explicit, easy-to-find image placeholders left
   for the user to fill in later. Trigger whenever the user mentions adding,
   publishing, or updating a felipego.com project, a portfolio project item, the
   Notion Projects/Proyectos databases, generating project documentation, or
   making a Mintlify wiki for a repo — even if they don't spell out every step.
-  Uses the Notion MCP and Claude in Chrome.
+  Uses Notion (via the Executor MCP hub) and Claude in Chrome.
 ---
 
 # felipego.com project publisher
@@ -53,11 +53,16 @@ decorative filler.
 - **Confirm the Notion write.** Creating or overwriting a portfolio page is
   outward-facing. Show the user the content you're about to write and get a clear
   yes before calling the Notion write tools.
-- **Load the tools you need up front.** Notion MCP (`notion-fetch`,
-  `notion-search`, `notion-query-data-sources`, `notion-create-pages`,
-  `notion-update-page`), Claude in Chrome (`tabs_context_mcp`, `navigate`,
-  `computer`, `get_page_text`, `read_page`), and `WebFetch`. In Claude Code these
-  may be deferred — load them with one `ToolSearch` call.
+- **Load the tools you need up front.** Notion runs through **Executor**
+  (`mcp__executor__execute`), not a direct MCP server. This skill's databases
+  live in the **`felipegiraldo`** workspace, so every Notion tool named below in
+  short form (`notion-fetch`, `notion-search`, `notion-query-data-sources`,
+  `notion-create-pages`, `notion-update-page`) maps to
+  `tools.notion_mcp.user.felipegiraldo.<name_with_underscores>` inside an
+  `execute` call — e.g. `notion-search` → `tools.notion_mcp.user.felipegiraldo.notion_search`.
+  Also load Claude in Chrome (`tabs_context_mcp`, `navigate`, `computer`,
+  `get_page_text`, `read_page`) and `WebFetch`. In Claude Code these may be
+  deferred — load them with one `ToolSearch` call.
 - **Phase 5 needs a working directory.** `scripts/notion-html.mjs` requires
   `@notionhq/client` + `NOTION_API_KEY`, which only exist in the felipego.com
   site repo checkout — run that script (and any local preview server) with the

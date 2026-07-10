@@ -1,7 +1,8 @@
 # Instrucciones globales
 
 - No añadir `Co-Authored-By: Claude ...` en los mensajes de commit de git.
-- Existen skills personales en `~/.claude/skills` (browser-verify, fix-build, commit-and-push, docker-dev-compose, challenge-my-plan, webapp-blueprint, notion-mcp, project-hub) para tareas recurrentes — revísalas cuando el nombre no sea obvio a partir de la tarea.
+- Las integraciones externas (Notion, Context7, Vercel, …) van **siempre por Executor** (`mcp__executor__execute`), nunca por un MCP directo ni la API pública. Notion tiene 2 workspaces: `felipegiraldo` (default) y `centrodeprototipado` (solo para ese proyecto). Ver skills `notion-mcp` y `context7-mcp`.
+- Hay skills personales en `~/.claude/skills` para tareas recurrentes — revísalas cuando el nombre no sea obvio a partir de la tarea.
 
 ## Estilo de trabajo
 

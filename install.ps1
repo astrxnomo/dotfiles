@@ -48,4 +48,32 @@ Get-ChildItem -Path "$repo\claude\skills" -Directory | ForEach-Object {
     Link-Config "$env:USERPROFILE\.claude\skills\$($_.Name)" $_.FullName
 }
 
+# Git: materialize symlinks natively. Los repos de proyecto usan symlinks
+# .claude/skills → .agents/skills; sin esto, git en Windows los checkoutea como
+# archivos de texto planos (rotos). Requiere Modo de desarrollador (ver arriba).
+git config --global core.symlinks true
+
+# --- Claude Code: MCP + plugins (not symlinkable — live in ~/.claude.json / plugin store) ---
+if (Get-Command claude -ErrorAction SilentlyContinue) {
+    # Executor: single MCP hub for all external integrations (Notion, Context7, Vercel, ...).
+    # Connections themselves are managed at executor.sh; first use prompts an OAuth authorize.
+    $executorUrl = "https://executor.sh/felipe-giraldo-s-organization/mcp"
+    if ((claude mcp list 2>$null) -notmatch "executor") {
+        claude mcp add --transport http executor $executorUrl --scope user
+        Write-Output "Added Executor MCP (run /mcp in Claude Code to authorize)"
+    } else {
+        Write-Output "Executor MCP already configured"
+    }
+
+    # Only plugin we keep is superpowers.
+    if ((claude plugin list 2>$null) -notmatch "superpowers") {
+        claude plugin install superpowers@claude-plugins-official
+    } else {
+        Write-Output "superpowers plugin already installed"
+    }
+} else {
+    Write-Warning "claude CLI not found — skipping Executor MCP + superpowers plugin. Install Claude Code, then re-run this script."
+}
+
 Write-Output "`nDone. Make sure these are installed: WezTerm, Oh My Posh (winget install JanDeDobbeleer.OhMyPosh), JetBrainsMono Nerd Font, Claude Code."
+Write-Output "After first run, open Claude Code and run /mcp to authorize Executor (Notion, Context7, Vercel connections)."

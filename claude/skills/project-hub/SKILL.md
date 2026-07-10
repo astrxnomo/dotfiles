@@ -3,7 +3,7 @@ name: project-hub
 description: Use cuando el trabajo implique gestionar proyectos o tareas del usuario en su "Project Hub" de Notion — desglosar un plan en tareas, crear/mover tareas de un proyecto, revisar qué hay pendiente y continuar, registrar decisiones técnicas, o dar de alta un repo como proyecto. Sistema central compartido entre todos los repos.
 ---
 
-Sistema central de gestión de proyectos del usuario en Notion. Usa siempre el MCP de Notion (ver skill `notion-mcp`) para leer/escribir aquí — nunca la API pública ni scraping.
+Sistema central de gestión de proyectos del usuario en Notion. Vive en el workspace **`felipegiraldo`** — accede siempre vía **Executor** (`tools.notion_mcp.user.felipegiraldo.*` dentro de `mcp__executor__execute`; ver skill `notion-mcp`), nunca la API pública ni scraping.
 
 ## Estructura (IDs fijos)
 

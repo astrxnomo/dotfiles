@@ -5,6 +5,8 @@ description: This skill should be used when the user asks about libraries, frame
 
 When the user asks about libraries, frameworks, or needs code examples, use Context7 to fetch current documentation instead of relying on training data.
 
+Context7 is accessed through **Executor** (`mcp__executor__execute`), not a direct MCP server — there is no standalone `context7` MCP connection anymore. Call it from inside the `execute` sandbox using the `context7_mcp.user.context7` connection.
+
 ## When to Use This Skill
 
 Activate this skill when the user:
@@ -18,10 +20,16 @@ Activate this skill when the user:
 
 ### Step 1: Resolve the Library ID
 
-Call `resolve-library-id` with:
+Inside `mcp__executor__execute`, call:
 
-- `libraryName`: The library name extracted from the user's question
-- `query`: The user's full question (improves relevance ranking)
+```ts
+const result = await tools.context7_mcp.user.context7.resolve_library_id({
+  libraryName: "<library name from the user's question>",
+  query: "<the user's full question>", // improves relevance ranking
+});
+```
+
+Both `libraryName` and `query` are required.
 
 ### Step 2: Select the Best Match
 
@@ -33,10 +41,13 @@ From the resolution results, choose based on:
 
 ### Step 3: Fetch the Documentation
 
-Call `query-docs` with:
-
-- `libraryId`: The selected Context7 library ID (e.g., `/vercel/next.js`)
-- `query`: The user's specific question
+```ts
+const docs = await tools.context7_mcp.user.context7.query_docs({
+  libraryId: "<the selected Context7 library ID, e.g. /vercel/next.js>",
+  query: "<the user's specific question>",
+});
+return docs;
+```
 
 ### Step 4: Use the Documentation
 

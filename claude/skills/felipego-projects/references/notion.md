@@ -3,6 +3,12 @@
 Everything you need to read and write the portfolio project rows. Fetch the live
 schema before writing (options drift), but these IDs are stable.
 
+> **Access path:** all `notion-*` tool references in this file route through
+> **Executor** — call them inside `mcp__executor__execute` as
+> `tools.notion_mcp.user.felipegiraldo.<name_with_underscores>` (e.g.
+> `notion-fetch` → `tools.notion_mcp.user.felipegiraldo.notion_fetch`). These
+> databases are in the `felipegiraldo` workspace.
+
 ## Where the databases live
 
 Parent hub page **"Databases"**: `https://app.notion.com/p/18123bce2002803997ecefc3eeed5630`
