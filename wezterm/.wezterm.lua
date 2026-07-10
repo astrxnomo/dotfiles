@@ -4,7 +4,7 @@ local config = wezterm.config_builder()
 local is_windows = wezterm.target_triple:find("windows") ~= nil
 
 if is_windows then
-  config.default_prog = { "C:/Program Files/PowerShell/7/pwsh.exe", "-NoLogo" }
+  config.default_prog = { "pwsh.exe", "-NoLogo" }
 end
 
 config.font = wezterm.font("JetBrainsMono Nerd Font")
