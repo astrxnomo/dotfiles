@@ -22,6 +22,7 @@ Personal configuration files, symlinked from here to keep them in sync across ma
 - `browser-verify` — test a feature with Claude in Chrome
 - `felipego-projects` — publish/update felipego.com portfolio projects in Notion
 - `activity-report` — draft weekly/monthly activity reports for the university role, off by default (invoked manually)
+- `improve` — survey a codebase as a senior advisor and produce implementation plans for other agents to execute (read-only, from [shadcn/improve](https://skills.sh/shadcn/improve))
 
 Check each skill's `SKILL.md` for the current, authoritative on/off state and
 scope — the list above is descriptive, not the source of truth; `claude/settings.json`'s `skillOverrides` is.
