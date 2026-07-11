@@ -108,6 +108,7 @@ function Clean-ClaudeBaseline($repo) {
 Link-Config "$env:USERPROFILE\.wezterm.lua" "$repo\wezterm\.wezterm.lua"
 Link-Config "$env:USERPROFILE\.config\oh-my-posh\material.omp.json" "$repo\oh-my-posh\material.omp.json"
 Link-Config "$env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1" "$repo\powershell\Microsoft.PowerShell_profile.ps1"
+Link-Config "$env:APPDATA\Zed\settings.json" "$repo\zed\settings.json"
 Link-Config "$env:USERPROFILE\.claude\settings.json" "$repo\claude\settings.json"
 Link-Config "$env:USERPROFILE\.claude\CLAUDE.md" "$repo\claude\CLAUDE.md"
 # Link each skill individually so repo-managed skills coexist with local/plugin ones.

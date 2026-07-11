@@ -1,0 +1,118 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "git": {
+    "disable_git": false
+  },
+  "cli_default_open_behavior": "existing_window",
+  "buffer_line_height": "comfortable",
+  "disable_ai": true,
+  "agent_buffer_font_size": 12.0,
+  "agent_ui_font_size": 14.0,
+  "ui_font_weight": 100.0,
+  "ui_font_family": ".ZedSans",
+  "terminal": {
+    "font_family": "JetBrains Mono",
+    "font_size": 14.0,
+  },
+  "diff_view_style": "unified",
+  "git_panel": {
+    "sort_by_path": true,
+    "dock": "left",
+  },
+  "outline_panel": {
+    "dock": "right",
+  },
+  "edit_predictions": {
+    "provider": "copilot",
+  },
+  "vim": {
+    "default_mode": "normal",
+  },
+  "bottom_dock_layout": "contained",
+  "tab_bar": {
+    "show_tab_bar_buttons": true,
+    "show_pinned_tabs_in_separate_row": false,
+  },
+  "tabs": {
+    "file_icons": false,
+    "git_status": false,
+  },
+  "title_bar": {
+    "button_layout": "platform_default",
+    "show_project_items": true,
+    "show_branch_name": true,
+    "show_branch_status_icon": false,
+  },
+  "status_bar": {
+    "show_active_file": false,
+    "line_endings_button": false,
+    "active_language_button": true,
+  },
+  "project_panel": {
+    "dock": "left",
+    "button": true,
+  },
+  "agent": {
+    "expand_edit_card": true,
+    "sandbox_permissions": {
+      "allow_unsandboxed": true
+    },
+    "inline_assistant_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-5.2-codex",
+      "enable_thinking": false
+    },
+    "sidebar_side": "right",
+    "dock": "right",
+    "default_model": {
+      "provider": "copilot_chat",
+      "model": "gpt-5-mini",
+      "enable_thinking": true,
+      "effort": "high",
+    },
+    "favorite_models": [],
+    "model_parameters": [],
+  },
+  "context_servers": {
+    },
+  "icon_theme": {
+    "mode": "light",
+    "light": "Catppuccin Latte",
+    "dark": "Symbols Icon Theme",
+  },
+  "buffer_font_family": "JetBrains Mono",
+  "agent_servers": {
+    },
+  "base_keymap": "VSCode",
+  "ui_font_size": 15.0,
+  "buffer_font_size": 13.0,
+  "theme": {
+    "mode": "dark",
+    "light": "Ayu Light",
+    "dark": "Tokyo Night Dark",
+  },
+  "lsp": {
+    "vtsls": {
+      "settings": {
+        "typescript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always"
+          }
+        },
+        "javascript": {
+          "updateImportsOnFileMove": {
+            "enabled": "always"
+          }
+        }
+      },
+      "enable_lsp_tasks": true
+    },
+  },
+}

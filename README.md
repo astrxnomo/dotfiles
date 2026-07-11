@@ -10,6 +10,8 @@ Archivos de configuración personal, symlinkeados desde aquí para mantenerlos s
 - `claude/settings.json` — settings globales de Claude Code (modelo, hooks, plugins, skillOverrides)
 - `claude/CLAUDE.md` — instrucciones globales de Claude Code (reglas de commits, puntero a skills personales)
 - `claude/skills/` — skills personales de Claude Code (ver modelo opt-in abajo)
+- `zed/settings.json` — settings del editor Zed (tema, fuentes, LSP, agent)
+- `zed/extensions.md` — lista de referencia de extensiones instaladas (instalación manual, ver nota abajo)
 
 ### Skills personales
 
@@ -37,6 +39,13 @@ Para activar una en un proyecto, en su `.claude/settings.json`:
 { "skillOverrides": { "webapp-blueprint": "on" } }
 ```
 
+## Zed
+
+`settings.json` se symlinkea desde `%APPDATA%\Zed`. Las extensiones
+no son symlinkeables (Zed no tiene CLI ni archivo declarativo para instalarlas);
+`zed/extensions.md` es solo una lista de referencia para instalarlas a mano desde
+el editor (`Ctrl+Shift+X` o paleta de comandos `zed: extensions`).
+
 ## MCP y plugins
 
 - **MCP:** todas las integraciones externas (Notion, Context7, Vercel) se acceden vía **Executor** (`mcp__executor__execute`), un único servidor MCP hosteado en executor.sh que centraliza las conexiones y permite múltiples cuentas por integración (2 workspaces de Notion, 2 cuentas de Vercel, etc.). Las conexiones se gestionan en el dashboard de Executor, no en este repo. El servidor `executor` vive en `~/.claude.json` (no symlinkable) — `install.ps1` lo registra con `claude mcp add`; la primera vez se autoriza con `/mcp`.
@@ -45,7 +54,7 @@ Para activar una en un proyecto, en su `.claude/settings.json`:
 
 ## Instalación en una PC nueva
 
-1. Instala WezTerm, [Oh My Posh](https://ohmyposh.dev) (`winget install JanDeDobbeleer.OhMyPosh`), una Nerd Font (JetBrainsMono Nerd Font) y Claude Code.
+1. Instala WezTerm, [Oh My Posh](https://ohmyposh.dev) (`winget install JanDeDobbeleer.OhMyPosh`), una Nerd Font (JetBrainsMono Nerd Font), Claude Code y [Zed](https://zed.dev).
 2. Activa el **Modo de desarrollador** (Configuración > Privacidad y seguridad > Para desarrolladores) para que se puedan crear symlinks sin admin.
 3. Clona este repo y ejecuta:
 
@@ -56,3 +65,4 @@ Para activar una en un proyecto, en su `.claude/settings.json`:
 
 4. Reinicia WezTerm / abre una pestaña nueva de PowerShell.
 5. Abre Claude Code y ejecuta `/mcp` para autorizar Executor (conexiones de Notion, Context7, Vercel).
+6. Abre Zed e instala las extensiones listadas en `zed/extensions.md` a mano.
