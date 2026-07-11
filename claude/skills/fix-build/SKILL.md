@@ -3,5 +3,5 @@ name: fix-build
 description: Check the build, to fix errors and linting errors
 ---
 
-Ejecuta el comando de build hasta que todos los errores se solucionen.
-Si hay errores de linting, solucionalos.
+Run the build command until all errors are resolved.
+If there are linting errors, fix them too.

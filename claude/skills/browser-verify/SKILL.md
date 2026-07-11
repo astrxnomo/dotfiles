@@ -1,6 +1,6 @@
 ---
 name: browser-verify
-description: Test the feature using a browser automation tool like Claude in Chrome or Playwright.
+description: Test the feature using a browser automation tool like Claude in Chrome.
 ---
 
-Usando Claude in Chrome o playwright CLI, abre el navegador y testea la funcionalidad.
+Using Claude in Chrome, open the browser and test the feature.

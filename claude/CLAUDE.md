@@ -1,10 +1,10 @@
-# Instrucciones globales
+# Global instructions
 
-- No añadir `Co-Authored-By: Claude ...` en los mensajes de commit de git.
-- Las integraciones externas (Notion, Context7, Vercel, …) van **siempre por Executor** (`mcp__executor__execute`), nunca por un MCP directo ni la API pública. Notion tiene 2 workspaces: `felipegiraldo` (default) y `centrodeprototipado` (solo para ese proyecto). Ver skills `notion-mcp` y `context7-mcp`.
-- Hay skills personales en `~/.claude/skills` para tareas recurrentes — revísalas cuando el nombre no sea obvio a partir de la tarea.
+- Don't add `Co-Authored-By: Claude ...` to git commit messages.
+- External integrations (Notion, Context7, Vercel, …) always go **through Executor** (`mcp__executor__execute`), never a direct MCP or the public API. Notion has 2 workspaces: `felipegiraldo` (default) and `centrodeprototipado` (only for that project). See the `notion-mcp` and `context7-mcp` skills.
+- There are personal skills in `~/.claude/skills` for recurring tasks — check them when the task's name isn't obvious from the task itself.
 
-## Estilo de trabajo
+## Working style
 
-- Antes de implementar algo no trivial: si hay ambigüedad o varias interpretaciones, pregunta en vez de asumir en silencio.
-- Cambios quirúrgicos: toca solo lo que pide la tarea; no "mejores" código adyacente ni borres código muerto ajeno (menciónalo).
+- Before implementing anything non-trivial: if there's ambiguity or multiple interpretations, ask instead of silently assuming.
+- Surgical changes: only touch what the task asks for; don't "improve" adjacent code or delete unrelated dead code (mention it instead).

@@ -1,22 +1,22 @@
-# Extensiones de Zed
+# Zed extensions
 
-Zed no tiene un mecanismo declarativo ni de CLI para instalar extensiones (no
-hay `zed --install-extension` ni un archivo que el editor lea al arrancar), así
-que no son symlinkeables. Esta lista es solo referencia manual: instálalas
-desde `Ctrl+Shift+X` (Extensions) o la paleta de comandos (`zed: extensions`).
+Zed has no declarative or CLI mechanism to install extensions (there's no
+`zed --install-extension` and no file the editor reads on startup), so they
+can't be symlinked. This list is manual reference only: install them from
+`Ctrl+Shift+X` (Extensions) or the command palette (`zed: extensions`).
 
-- **Blade** — soporte de Laravel Blade
-- **Catppuccin Icons** — tema de iconos
-- **CSV** — soporte de CSV
-- **Dependi** — versiones de dependencias inline
-- **Dockerfile** — soporte de Dockerfile
-- **Git Firefly** — herramientas extra de Git
-- **HTML** — soporte de HTML
-- **Lua** — soporte de Lua
-- **Nginx** — soporte de config de Nginx
-- **PHP** — soporte de PHP
-- **PowerShell** — soporte de PowerShell
-- **Prisma** — soporte de schema de Prisma
-- **SQL** — soporte de SQL
-- **Tokyo Night Themes** — tema (usado en `settings.json`)
-- **Tokyo Night Dark theme** — tema (usado en `settings.json`)
+- **Blade** — Laravel Blade support
+- **Catppuccin Icons** — icon theme
+- **CSV** — CSV support
+- **Dependi** — inline dependency versions
+- **Dockerfile** — Dockerfile support
+- **Git Firefly** — extra Git tooling
+- **HTML** — HTML support
+- **Lua** — Lua support
+- **Nginx** — Nginx config support
+- **PHP** — PHP support
+- **PowerShell** — PowerShell support
+- **Prisma** — Prisma schema support
+- **SQL** — SQL support
+- **Tokyo Night Themes** — theme (used in `settings.json`)
+- **Tokyo Night Dark theme** — theme (used in `settings.json`)

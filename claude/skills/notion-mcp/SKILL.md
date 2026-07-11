@@ -3,28 +3,28 @@ name: notion-mcp
 description: Use whenever the task involves reading, creating, or editing content in Notion (pages, databases, comments). Ensures Notion is always accessed through the Notion MCP server instead of scraping, the public API directly, or other workarounds.
 ---
 
-Para cualquier operación sobre Notion (leer/crear/editar páginas o databases, comentarios, búsquedas), usa siempre Notion vía **Executor** (`mcp__executor__execute`), nunca un fetch directo a la API pública ni scraping del sitio. Ya no existe un servidor MCP de Notion directo — se quitó de `~/.claude.json` en favor de Executor.
+For any Notion operation (reading/creating/editing pages or databases, comments, search), always go through Notion via **Executor** (`mcp__executor__execute`), never a direct fetch to the public API or site scraping. There is no direct Notion MCP server anymore — it was removed from `~/.claude.json` in favor of Executor.
 
-## Cuentas disponibles
+## Available accounts
 
-Hay dos conexiones de Notion en Executor, cada una un workspace distinto:
+There are two Notion connections in Executor, each a different workspace:
 
-- `notion_mcp.user.felipegiraldo` — workspace personal de Felipe Giraldo. Úsala para `project-hub`, `felipego-projects`, y cualquier tarea que no especifique lo contrario.
-- `notion_mcp.user.centrodeprototipado` — workspace de Centro de Prototipado. Úsala solo cuando la tarea sea explícitamente sobre ese proyecto/organización.
+- `notion_mcp.user.felipegiraldo` — Felipe Giraldo's personal workspace. Use it for `project-hub`, `felipego-projects`, and any task that doesn't say otherwise.
+- `notion_mcp.user.centrodeprototipado` — Centro de Prototipado workspace. Use it only when the task is explicitly about that project/organization.
 
-Si no es obvio por contexto cuál de las dos aplica, pregunta antes de escribir nada (leer de la equivocada es inofensivo, pero crear/editar en el workspace equivocado no).
+If it isn't obvious from context which of the two applies, ask before writing anything (reading from the wrong one is harmless, but creating/editing in the wrong workspace isn't).
 
-## Cómo llamarlo
+## How to call it
 
-Dentro de `mcp__executor__execute`:
+Inside `mcp__executor__execute`:
 
 ```ts
 const result = await tools.notion_mcp.user.felipegiraldo.notion_search({
-  query: "<búsqueda>",
+  query: "<search query>",
   query_type: "internal",
   page_size: 5,
 });
 return result;
 ```
 
-Herramientas típicas: `notion_search`, `notion_fetch`, `notion_create_pages`, `notion_update_page`, `notion_move_pages`. Usa `tools.search({ query: "...", namespace: "notion_mcp" })` para descubrir el nombre exacto y el shape de argumentos si no lo recuerdas.
+Typical tools: `notion_search`, `notion_fetch`, `notion_create_pages`, `notion_update_page`, `notion_move_pages`. Use `tools.search({ query: "...", namespace: "notion_mcp" })` to discover the exact name and argument shape if you don't remember it — connections and tool names can change, so don't hardcode assumptions about them.

@@ -1,68 +1,65 @@
 # dotfiles
 
-Archivos de configuración personal, symlinkeados desde aquí para mantenerlos sincronizados entre máquinas.
+Personal configuration files, symlinked from here to keep them in sync across machines.
 
-## Contenido
+## Contents
 
-- `wezterm/.wezterm.lua` — config de la terminal WezTerm (tema, atajos, paneles, tab bar)
-- `oh-my-posh/material.omp.json` — tema del prompt Oh My Posh (Material, ajustado)
-- `powershell/Microsoft.PowerShell_profile.ps1` — perfil de PowerShell (init de Oh My Posh + alias estilo Linux)
-- `claude/settings.json` — settings globales de Claude Code (modelo, hooks, plugins, skillOverrides)
-- `claude/CLAUDE.md` — instrucciones globales de Claude Code (reglas de commits, puntero a skills personales)
-- `claude/skills/` — skills personales de Claude Code (ver modelo opt-in abajo)
-- `zed/settings.json` — settings del editor Zed (tema, fuentes, LSP, agent)
-- `zed/extensions.md` — lista de referencia de extensiones instaladas (instalación manual, ver nota abajo)
+- `wezterm/.wezterm.lua` — WezTerm terminal config (theme, keybindings, panes, tab bar)
+- `oh-my-posh/material.omp.json` — Oh My Posh prompt theme (Material, tweaked)
+- `powershell/Microsoft.PowerShell_profile.ps1` — PowerShell profile (Oh My Posh init + Linux-style aliases)
+- `claude/settings.json` — global Claude Code settings (model, hooks, plugins, skillOverrides)
+- `claude/CLAUDE.md` — global Claude Code instructions (commit rules, pointer to personal skills)
+- `claude/skills/` — personal Claude Code skills (see the opt-in model below)
+- `zed/settings.json` — Zed editor settings (theme, fonts, LSP, agent)
+- `zed/extensions.md` — reference list of installed extensions (manual install, see note below)
 
-### Skills personales
+### Personal skills
 
-- `commit-and-push` — git add + bump de versión + commit + push
-- `fix-build` — arreglar build y errores de linting
-- `context7-mcp` — docs actualizadas de librerías vía Context7 (por Executor)
-- `notion-mcp` — Notion vía Executor (2 workspaces: `felipegiraldo` y `centrodeprototipado`)
-- `project-hub` — gestión de proyectos/tareas en el "Project Hub" de Notion (workspace `felipegiraldo`)
-- `browser-verify` — testear una feature con Claude in Chrome o Playwright
-- `challenge-my-plan` — interrogar un plan/decisión hasta resolver toda ambigüedad
-- `docker-dev-compose` — guidelines para un docker compose de desarrollo
-- `webapp-blueprint` — blueprint de referencia para apps web (auth, dashboard, CRUD)
-- `felipego-projects` — publicar/actualizar proyectos del portafolio felipego.com en Notion
+- `commit-and-push` — git add + version bump + commit + push
+- `fix-build` — fix the build and linting errors
+- `context7` — up-to-date library docs via Context7 (through Executor)
+- `notion-mcp` — Notion through Executor (2 workspaces: `felipegiraldo` and `centrodeprototipado`)
+- `project-hub` — manage projects/tasks in the Notion "Project Hub" (workspace `felipegiraldo`)
+- `browser-verify` — test a feature with Claude in Chrome
+- `felipego-projects` — publish/update felipego.com portfolio projects in Notion
 
-#### Modelo opt-in (habilitación por proyecto)
+Check each skill's `SKILL.md` for the current, authoritative on/off state and
+scope — the list above is descriptive, not the source of truth; `claude/settings.json`'s `skillOverrides` is.
 
-Todas las skills viven globalmente (symlinkeadas, sincronizadas), pero el default global es **lean**: solo las universales quedan ON. Las situacionales/de-un-solo-proyecto quedan OFF por defecto vía `skillOverrides` en `claude/settings.json` y se activan **por proyecto** en el `.claude/settings.json` del repo que las necesite (la config de proyecto sobrescribe la global).
+#### Opt-in model (per-project enablement)
 
-- **ON global (universales):** `commit-and-push`, `fix-build`, `context7-mcp`, `notion-mcp`, `project-hub`.
-- **OFF global (opt-in por proyecto):** `browser-verify`, `challenge-my-plan`, `docker-dev-compose`, `webapp-blueprint`, `felipego-projects`.
+All skills live globally (symlinked, synced), but the global default is **lean**: only the universal ones stay ON. Situational/single-project skills are OFF by default via `skillOverrides` in `claude/settings.json` and get turned on **per project** in that repo's own `.claude/settings.json` (project config overrides the global one).
 
-Para activar una en un proyecto, en su `.claude/settings.json`:
+To enable one in a project, in its `.claude/settings.json`:
 
 ```json
-{ "skillOverrides": { "webapp-blueprint": "on" } }
+{ "skillOverrides": { "felipego-projects": "on" } }
 ```
 
 ## Zed
 
-`settings.json` se symlinkea desde `%APPDATA%\Zed`. Las extensiones
-no son symlinkeables (Zed no tiene CLI ni archivo declarativo para instalarlas);
-`zed/extensions.md` es solo una lista de referencia para instalarlas a mano desde
-el editor (`Ctrl+Shift+X` o paleta de comandos `zed: extensions`).
+`settings.json` is symlinked from `%APPDATA%\Zed`. Extensions can't be
+symlinked (Zed has no CLI or declarative file to install them);
+`zed/extensions.md` is just a manual reference list for installing them by
+hand from the editor (`Ctrl+Shift+X` or the `zed: extensions` command palette).
 
-## MCP y plugins
+## MCP and plugins
 
-- **MCP:** todas las integraciones externas (Notion, Context7, Vercel) se acceden vía **Executor** (`mcp__executor__execute`), un único servidor MCP hosteado en executor.sh que centraliza las conexiones y permite múltiples cuentas por integración (2 workspaces de Notion, 2 cuentas de Vercel, etc.). Las conexiones se gestionan en el dashboard de Executor, no en este repo. El servidor `executor` vive en `~/.claude.json` (no symlinkable) — `install.ps1` lo registra con `claude mcp add`; la primera vez se autoriza con `/mcp`.
-- **Plugins:** solo se usa **`superpowers`**. Los plugins no viven en el repo (se instalan en el store de Claude Code); `install.ps1` corre `claude plugin install superpowers@claude-plugins-official`.
-- **Limpieza:** al final, `install.ps1` deja Claude en este baseline exacto. Detecta lo que sobra en la otra PC (plugins ≠ superpowers, MCP ≠ executor, skills sueltas en `~/.claude/skills`, y `rules`/`settings.local.json` no gestionados), muestra el plan y pide **una sola confirmación** (default No) antes de borrar. Si no hay nada fuera del baseline, no pregunta.
+- **MCP:** all external integrations (Notion, Context7, Vercel) are accessed via **Executor** (`mcp__executor__execute`), a single MCP server hosted at executor.sh that centralizes connections and supports multiple accounts per integration (2 Notion workspaces, 2 Vercel accounts, etc.). Connections themselves are managed in the Executor dashboard, not in this repo. The `executor` server lives in `~/.claude.json` (not symlinkable) — `install.ps1` registers it with `claude mcp add`; the first time, authorize it with `/mcp`.
+- **Plugins:** only **`superpowers`** is used. Plugins don't live in the repo (they're installed from the Claude Code store); `install.ps1` runs `claude plugin install superpowers@claude-plugins-official`.
+- **Cleanup:** at the end, `install.ps1` leaves Claude on this exact baseline. It detects whatever's extra on the other PC (plugins ≠ superpowers, MCP ≠ executor, loose skills in `~/.claude/skills`, and unmanaged `rules`/`settings.local.json`), shows the plan, and asks for **one single confirmation** (default No) before deleting. If there's nothing outside the baseline, it doesn't ask.
 
-## Instalación en una PC nueva
+## Installing on a new PC
 
-1. Instala WezTerm, [Oh My Posh](https://ohmyposh.dev) (`winget install JanDeDobbeleer.OhMyPosh`), una Nerd Font (JetBrainsMono Nerd Font), Claude Code y [Zed](https://zed.dev).
-2. Activa el **Modo de desarrollador** (Configuración > Privacidad y seguridad > Para desarrolladores) para que se puedan crear symlinks sin admin.
-3. Clona este repo y ejecuta:
+1. Install WezTerm, [Oh My Posh](https://ohmyposh.dev) (`winget install JanDeDobbeleer.OhMyPosh`), a Nerd Font (JetBrainsMono Nerd Font), Claude Code, and [Zed](https://zed.dev).
+2. Enable **Developer Mode** (Settings > Privacy & security > For developers) so symlinks can be created without admin.
+3. Clone this repo and run:
 
    ```powershell
    git clone https://github.com/astrxnomo/dotfiles.git D:\Code\dotfiles
    D:\Code\dotfiles\install.ps1
    ```
 
-4. Reinicia WezTerm / abre una pestaña nueva de PowerShell.
-5. Abre Claude Code y ejecuta `/mcp` para autorizar Executor (conexiones de Notion, Context7, Vercel).
-6. Abre Zed e instala las extensiones listadas en `zed/extensions.md` a mano.
+4. Restart WezTerm / open a new PowerShell tab.
+5. Open Claude Code and run `/mcp` to authorize Executor (Notion, Context7, Vercel connections).
+6. Open Zed and install the extensions listed in `zed/extensions.md` by hand.

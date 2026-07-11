@@ -1,7 +1,8 @@
 # Notion reference — felipego.com Projects/Proyectos
 
-Everything you need to read and write the portfolio project rows. Fetch the live
-schema before writing (options drift), but these IDs are stable.
+Everything you need to read and write the portfolio project rows. Resolve IDs
+and schema live every time — never hardcode or remember them, they can drift
+if the databases get restructured.
 
 > **Access path:** all `notion-*` tool references in this file route through
 > **Executor** — call them inside `mcp__executor__execute` as
@@ -11,19 +12,16 @@ schema before writing (options drift), but these IDs are stable.
 
 ## Where the databases live
 
-Parent hub page **"Databases"**: `https://app.notion.com/p/18123bce2002803997ecefc3eeed5630`
-(under the `felipego.com` workspace page). It holds two mirrored sets of
-databases — an **English** column and an **Español** column. The two you care
-about are Projects and Proyectos.
-
-| Language | DB name | Data source (use as `data_source_id` / table) | Parent DB page |
-| --- | --- | --- | --- |
-| English | Projects | `collection://11623bce-2002-81c6-ae1c-000b73884338` | `https://app.notion.com/p/11623bce20028021bc55e1133309e720` |
-| Español | Proyectos | `collection://2ce23bce-2002-8159-afdd-000b2c2ca093` | `https://app.notion.com/p/2ce23bce200280f69649e72e78a2a743` |
+Find the parent hub page named **"Databases"** (under the `felipego.com`
+workspace page) with `notion-search({ query: "Databases" })`, then
+`notion-fetch` it — it holds two mirrored sets of databases, an **English**
+column and an **Español** column. The two you care about are **Projects**
+(English) and **Proyectos** (Español); fetching the hub page (or searching by
+name directly) gives you each one's current `data_source_id` / `collection://`
+reference.
 
 When creating a page, pass the parent as
-`{"type": "data_source_id", "data_source_id": "11623bce-2002-81c6-ae1c-000b73884338"}`
-(strip the `collection://` prefix).
+`{"type": "data_source_id", "data_source_id": "<the id you just resolved, without the "collection://" prefix>"}`.
 
 **Always `notion-fetch` each data source first** to get the current SQLite schema
 and the current `tags` option list. The tool's own guidance says the same — never
