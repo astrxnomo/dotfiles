@@ -22,6 +22,7 @@ Personal configuration files, symlinked from here to keep them in sync across ma
 - `project-hub` — manage projects/tasks in the Notion "Project Hub" (workspace `felipegiraldo`)
 - `browser-verify` — test a feature with Claude in Chrome
 - `felipego-projects` — publish/update felipego.com portfolio projects in Notion
+- `activity-report` — draft weekly/monthly activity reports for the university role, off by default (invoked manually)
 
 Check each skill's `SKILL.md` for the current, authoritative on/off state and
 scope — the list above is descriptive, not the source of truth; `claude/settings.json`'s `skillOverrides` is.

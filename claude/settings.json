@@ -8,9 +8,8 @@
   },
   "model": "sonnet",
   "skillOverrides": {
-    "docker-dev-compose": "off",
-    "webapp-blueprint": "off",
-    "felipego-projects": "off"
+    "felipego-projects": "off",
+    "activity-report": "off"
   },
   "hooks": {
     "Notification": [
