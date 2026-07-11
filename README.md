@@ -17,8 +17,7 @@ Personal configuration files, symlinked from here to keep them in sync across ma
 
 - `commit-and-push` — git add + version bump + commit + push
 - `fix-build` — fix the build and linting errors
-- `context7` — up-to-date library docs via Context7 (through Executor)
-- `notion-mcp` — Notion through Executor (2 workspaces: `felipegiraldo` and `centrodeprototipado`)
+- `mcp-integrations` — Notion, Context7, Supabase, Vercel through Executor (Notion and Supabase have 2 accounts each: `felipegiraldo` and `centrodeprototipado`)
 - `project-hub` — manage projects/tasks in the Notion "Project Hub" (workspace `felipegiraldo`)
 - `browser-verify` — test a feature with Claude in Chrome
 - `felipego-projects` — publish/update felipego.com portfolio projects in Notion
@@ -46,7 +45,7 @@ hand from the editor (`Ctrl+Shift+X` or the `zed: extensions` command palette).
 
 ## MCP and plugins
 
-- **MCP:** all external integrations (Notion, Context7, Vercel) are accessed via **Executor** (`mcp__executor__execute`), a single MCP server hosted at executor.sh that centralizes connections and supports multiple accounts per integration (2 Notion workspaces, 2 Vercel accounts, etc.). Connections themselves are managed in the Executor dashboard, not in this repo. The `executor` server lives in `~/.claude.json` (not symlinkable) — `install.ps1` registers it with `claude mcp add`; the first time, authorize it with `/mcp`.
+- **MCP:** all external integrations (Notion, Context7, Supabase, Vercel) are accessed via **Executor** (`mcp__executor__execute`), a single MCP server hosted at executor.sh that centralizes connections and supports multiple accounts per integration (2 Notion workspaces, 2 Supabase organizations, etc.). Connections themselves are managed in the Executor dashboard, not in this repo. The `executor` server lives in `~/.claude.json` (not symlinkable) — `install.ps1` registers it with `claude mcp add`; the first time, authorize it with `/mcp`.
 - **Plugins:** only **`superpowers`** is used. Plugins don't live in the repo (they're installed from the Claude Code store); `install.ps1` runs `claude plugin install superpowers@claude-plugins-official`.
 - **Cleanup:** at the end, `install.ps1` leaves Claude on this exact baseline. It detects whatever's extra on the other PC (plugins ≠ superpowers, MCP ≠ executor, loose skills in `~/.claude/skills`, and unmanaged `rules`/`settings.local.json`), shows the plan, and asks for **one single confirmation** (default No) before deleting. If there's nothing outside the baseline, it doesn't ask.
 
@@ -62,5 +61,5 @@ hand from the editor (`Ctrl+Shift+X` or the `zed: extensions` command palette).
    ```
 
 4. Restart WezTerm / open a new PowerShell tab.
-5. Open Claude Code and run `/mcp` to authorize Executor (Notion, Context7, Vercel connections).
+5. Open Claude Code and run `/mcp` to authorize Executor (Notion, Context7, Supabase, Vercel connections).
 6. Open Zed and install the extensions listed in `zed/extensions.md` by hand.
