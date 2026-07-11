@@ -6,10 +6,8 @@
   "permissions": {
     "defaultMode": "auto"
   },
-  "model": "opus",
+  "model": "sonnet",
   "skillOverrides": {
-    "browser-verify": "off",
-    "challenge-my-plan": "off",
     "docker-dev-compose": "off",
     "webapp-blueprint": "off",
     "felipego-projects": "off"
