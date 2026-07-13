@@ -18,6 +18,8 @@
   "ui_font_weight": 100.0,
   "ui_font_family": ".ZedSans",
   "terminal": {
+    "flexible": false,
+    "dock": "right",
     "font_family": "JetBrains Mono",
     "font_size": 14.0,
   },
