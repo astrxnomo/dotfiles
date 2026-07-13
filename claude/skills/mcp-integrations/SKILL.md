@@ -5,39 +5,20 @@ description: Use whenever the task involves an external integration connected th
 
 All external integrations go **through Executor** (`mcp__executor__execute`), never a direct MCP server, the public API, or a CLI shortcut. Call `skills({ name: "execute" })` inside Executor first if you're unsure how to write the sandboxed code.
 
-Connections and tool names can change — use `tools.search({ query: "...", namespace: "<integration>_mcp" })` (or just the bare integration name, e.g. `"vercel"`) to discover the exact tool path and argument shape if you don't remember it. Don't hardcode assumptions beyond what's below.
+**Discover, don't memorize.** Connections and tool names change over time. Use `tools.search({ query: "...", namespace: "<integration>_mcp" })` (or the bare integration name, e.g. `"vercel"`) to find the exact tool path and argument shape. Any MCP added to Executor shows up here automatically — this skill does **not** keep an inventory of them.
 
-## Notion (`notion_mcp`)
+## Accounts
 
-Two workspaces:
+Some integrations (e.g. Notion, Supabase) have more than one connected account/organization, distinguished by a `.user.<name>` suffix on the namespace (e.g. `notion_mcp.user.felipegiraldo`, `notion_mcp.user.centrodeprototipado`).
 
-- `notion_mcp.user.felipegiraldo` — Felipe Giraldo's personal workspace. Default for `project-hub`, `felipego-projects`, and anything that doesn't say otherwise.
-- `notion_mcp.user.centrodeprototipado` — Centro de Prototipado workspace. Only for tasks explicitly about that project/organization.
-
-If it isn't obvious which applies, ask before writing (reading from the wrong one is harmless, creating/editing isn't).
-
-Typical tools: `notion_search`, `notion_fetch`, `notion_create_pages`, `notion_update_page`, `notion_move_pages`.
-
-## Supabase (`supabase_mcp`)
-
-Two organizations:
-
-- `supabase_mcp.user.felipegiraldo` — Felipe Giraldo's personal organization. Default.
-- `supabase_mcp.user.centrodeprototipado` — Centro de Prototipado organization. Only for tasks explicitly about that project/organization.
-
-If it isn't obvious which applies, ask before writing (reading is harmless, migrations/deploys/branches in the wrong organization aren't).
-
-Typical tools: `list_projects`, `list_tables`, `list_branches`, `create_branch`, `deploy_edge_function`, `get_edge_function`, `list_edge_functions`, `get_advisors`, `get_logs`, `search_docs`.
+- Use the account the user tells you to use — it's the source of truth.
+- If the user didn't specify and it isn't obvious, **ask before writing** (reading from the wrong account is harmless; creating/editing, migrations, deploys, or branches are not).
 
 ## Context7 (`context7_mcp`)
 
-Single connection: `context7_mcp.user.context7`. Use when the user asks about libraries, frameworks, API references, or needs current code examples instead of relying on training data.
-
-Two-step flow:
+Two-step flow, worth remembering because it isn't obvious from the tool list:
 
 1. `resolve_library_id({ libraryName, query })` — both required; `query` is the user's full question, improves relevance ranking.
-2. `query_docs({ libraryId, query })` — use the library ID picked from step 1 (prefer exact name match, higher benchmark score, and version-specific IDs when the user names a version).
+2. `query_docs({ libraryId, query })` — use the library ID from step 1 (prefer exact name match, higher benchmark score, and version-specific IDs when the user names a version).
 
-## Vercel (`vercel`)
-
-Single connection: `vercel.user.felipegiraldo`. No account ambiguity — just look up the right tool with `tools.search({ query: "...", namespace: "vercel" })`.
+Use it when the user asks about libraries, frameworks, or API references, or needs current code examples instead of relying on training data.

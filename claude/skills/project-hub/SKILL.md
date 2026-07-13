@@ -3,7 +3,7 @@ name: project-hub
 description: Use when the work involves managing the user's projects or tasks in their Notion "Project Hub" — breaking a plan into tasks, creating/moving tasks for a project, reviewing what's pending and continuing, logging technical decisions, or registering a repo as a project. Central system shared across all repos.
 ---
 
-The user's central project-management system in Notion. Lives in the **`felipegiraldo`** workspace — always access it via **Executor** (`tools.notion_mcp.user.felipegiraldo.*` inside `mcp__executor__execute`; see the `notion-mcp` skill), never the public API or scraping.
+The user's central project-management system in Notion. Lives in the **`felipegiraldo`** workspace — always access it via **Executor** (`tools.notion_mcp.user.felipegiraldo.*` inside `mcp__executor__execute`; see the `mcp-integrations` skill), never the public API or scraping.
 
 ## Structure (resolve it, don't hardcode it)
 
