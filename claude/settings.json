@@ -9,7 +9,8 @@
   "model": "opus",
   "skillOverrides": {
     "felipego-projects": "off",
-    "activity-report": "off"
+    "activity-report": "off",
+    "project-hub": "off"
   },
   "hooks": {
     "Notification": [
@@ -44,8 +45,8 @@
     ]
   },
   "enabledPlugins": {
-    "superpowers@claude-plugins-official": true,
-    "cowork-plugin-management@inline": false
+    "cowork-plugin-management@inline": false,
+    "superpowers@claude-plugins-official": true
   },
   "language": "Español",
   "effortLevel": "medium",
