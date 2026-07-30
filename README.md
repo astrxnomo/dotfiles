@@ -19,7 +19,7 @@ Personal configuration files, symlinked from here to keep them in sync across ma
 - `fix-build` — fix the build and linting errors
 - `mcp-integrations` — Notion, Context7, Supabase, Vercel through Executor (Notion and Supabase have 2 accounts each: `felipegiraldo` and `centrodeprototipado`)
 - `project-hub` — manage projects/tasks in the Notion "Project Hub" (workspace `felipegiraldo`)
-- `browser-verify` — test a feature with Claude in Chrome
+- `browser-verify` — test a feature in a real browser with the Chrome DevTools MCP
 - `felipego-projects` — publish/update felipego.com portfolio projects in Notion
 - `activity-report` — draft weekly/monthly activity reports for the university role, off by default (invoked manually)
 - `improve` — survey a codebase as a senior advisor and produce implementation plans for other agents to execute (read-only, from [shadcn/improve](https://skills.sh/shadcn/improve))
@@ -46,13 +46,16 @@ hand from the editor (`Ctrl+Shift+X` or the `zed: extensions` command palette).
 
 ## MCP and plugins
 
-- **MCP:** all external integrations (Notion, Context7, Supabase, Vercel) are accessed via **Executor** (`mcp__executor__execute`), a single MCP server hosted at executor.sh that centralizes connections and supports multiple accounts per integration (2 Notion workspaces, 2 Supabase organizations, etc.). Connections themselves are managed in the Executor dashboard, not in this repo. The `executor` server lives in `~/.claude.json` (not symlinkable) — `install.ps1` registers it with `claude mcp add`; the first time, authorize it with `/mcp`.
+Two MCP servers are part of the baseline. Neither lives in the repo (they're registered in `~/.claude.json`, which isn't symlinkable) — `install.ps1` adds both with `claude mcp add`.
+
+- **Executor** (`mcp__executor__execute`) — all external integrations (Notion, Context7, Supabase, Vercel) go through this single MCP server hosted at executor.sh, which centralizes connections and supports multiple accounts per integration (2 Notion workspaces, 2 Supabase organizations, etc.). Connections themselves are managed in the Executor dashboard, not in this repo. The first time, authorize it with `/mcp`.
+- **Chrome DevTools** (`mcp__chrome-devtools__*`) — browser automation and debugging: navigate, click/fill, snapshots and screenshots, console and network inspection, performance traces. Runs locally over stdio (`npx -y chrome-devtools-mcp@latest`, needs **Node 22+** and Google Chrome) and drives its **own dedicated Chrome profile**, so it never touches the personal one. The profile persists, so any sign-in only has to happen once. This replaces the Claude in Chrome extension.
 - **Plugins:** only **`superpowers`** is used. Plugins don't live in the repo (they're installed from the Claude Code store); `install.ps1` runs `claude plugin install superpowers@claude-plugins-official`.
-- **Cleanup:** at the end, `install.ps1` leaves Claude on this exact baseline. It detects whatever's extra on the other PC (plugins ≠ superpowers, MCP ≠ executor, loose skills in `~/.claude/skills`, and unmanaged `rules`/`settings.local.json`), shows the plan, and asks for **one single confirmation** (default No) before deleting. If there's nothing outside the baseline, it doesn't ask.
+- **Cleanup:** at the end, `install.ps1` leaves Claude on this exact baseline. It detects whatever's extra on the other PC (plugins ≠ superpowers, MCP ≠ executor/chrome-devtools, loose skills in `~/.claude/skills`, and unmanaged `rules`/`settings.local.json`), shows the plan, and asks for **one single confirmation** (default No) before deleting. If there's nothing outside the baseline, it doesn't ask.
 
 ## Installing on a new PC
 
-1. Install WezTerm, [Oh My Posh](https://ohmyposh.dev) (`winget install JanDeDobbeleer.OhMyPosh`), a Nerd Font (JetBrainsMono Nerd Font), Claude Code, and [Zed](https://zed.dev).
+1. Install WezTerm, [Oh My Posh](https://ohmyposh.dev) (`winget install JanDeDobbeleer.OhMyPosh`), a Nerd Font (JetBrainsMono Nerd Font), Claude Code, [Zed](https://zed.dev), Node 22+ and Google Chrome (the last two for the Chrome DevTools MCP).
 2. Enable **Developer Mode** (Settings > Privacy & security > For developers) so symlinks can be created without admin.
 3. Clone this repo and run:
 

@@ -220,10 +220,11 @@ demonstrates something about the project; a static diagram is usually enough.
      values) on `:root`/`.dark`, includes a "toggle theme" button that flips a
      `.dark` class on `<html>`, and iframes/inlines your diagram body styled
      with the same kit CSS.
-   - Serve it over `http://localhost` (Claude in Chrome cannot open `file://`
-     URLs) — a one-liner Node static server on a scratch port is enough — and
-     open it with Claude in Chrome. Screenshot light, click "toggle theme",
-     screenshot dark.
+   - Serve it over `http://localhost` — a one-liner Node static server on a
+     scratch port is enough; prefer this over `file://`, where module loading
+     and fetch behave differently — and open it with the Chrome DevTools MCP
+     (`new_page` + `navigate_page`). `take_screenshot` in light, `click` the
+     "toggle theme" button, `take_screenshot` in dark.
    - Confirm: text is legible in both themes, nothing relies on a hardcoded
      color, and the layout doesn't overflow at ~760px wide (the typical
      content column width).
@@ -249,9 +250,9 @@ demonstrates something about the project; a static diagram is usually enough.
 
 5. **Verify on the live page** (or `pnpm dev` locally against the same
    content): re-fetch the Notion page, confirm the block is where you expect,
-   and — if a local dev server is available — open the project page in Claude
-   in Chrome and confirm the diagram renders, sizes itself, and matches the
-   current theme.
+   and — if a local dev server is available — open the project page with the
+   Chrome DevTools MCP and confirm the diagram renders, sizes itself, and
+   matches the current theme.
 
 ## Placement: right after the section's heading (or an existing image)
 

@@ -13,7 +13,7 @@ description: >
   publishing, or updating a felipego.com project, a portfolio project item, the
   Notion Projects/Proyectos databases, generating project documentation, or
   making a Mintlify wiki for a repo — even if they don't spell out every step.
-  Uses Notion (via the Executor MCP hub) and Claude in Chrome.
+  Uses Notion (via the Executor MCP hub) and the Chrome DevTools MCP.
 ---
 
 # felipego.com project publisher
@@ -60,9 +60,10 @@ decorative filler.
   `notion-create-pages`, `notion-update-page`) maps to
   `tools.notion_mcp.user.felipegiraldo.<name_with_underscores>` inside an
   `execute` call — e.g. `notion-search` → `tools.notion_mcp.user.felipegiraldo.notion_search`.
-  Also load Claude in Chrome (`tabs_context_mcp`, `navigate`, `computer`,
-  `get_page_text`, `read_page`) and `WebFetch`. In Claude Code these may be
-  deferred — load them with one `ToolSearch` call.
+  Also load the Chrome DevTools MCP (`mcp__chrome-devtools__new_page`,
+  `navigate_page`, `take_snapshot`, `take_screenshot`, `click`, `fill`) and
+  `WebFetch`. In Claude Code these may be deferred — load them with one
+  `ToolSearch` call.
 - **Phase 5 needs a working directory.** `scripts/notion-html.mjs` requires
   `@notionhq/client` + `NOTION_API_KEY`, which only exist in the felipego.com
   site repo checkout — run that script (and any local preview server) with the
@@ -110,8 +111,9 @@ Notion content reflects the current code.
 ## Phase 3 — Read the wiki
 
 Read the generated wiki as the source of truth for the write-up. Prefer
-`WebFetch` on the wiki URL(s); if pages are gated or JS-rendered, use Chrome
-(`get_page_text`) on the open tab. Capture: what the project is, architecture,
+`WebFetch` on the wiki URL(s); if pages are gated or JS-rendered, read them in
+Chrome (`take_snapshot`, or `evaluate_script` returning `document.body.innerText`)
+on the open page. Capture: what the project is, architecture,
 tech stack, key features, notable technical decisions, and project structure —
 the raw material for the Notion body.
 
@@ -178,7 +180,7 @@ short:
    in Phase 3 — don't decorate or invent structure.
 2. **Wrap** it with the shared CSS kit: `node scripts/wrap-diagram.mjs
    body.html --out diagram.html` (inlines `assets/diagram-style.css`).
-3. **Preview it in both light and dark** with Claude in Chrome before
+3. **Preview it in both light and dark** with the Chrome DevTools MCP before
    publishing — this is live, public content.
 4. **Ship it** with `scripts/notion-html.mjs add/replace`, run from the
    felipego.com site repo checkout (needs `@notionhq/client` +
@@ -195,7 +197,7 @@ automated benchmark:
 
 - Re-fetch both Notion pages and confirm the body rendered (headings, code
   blocks, links, and either Mermaid diagrams or HTML blocks all present).
-- If HTML-block diagrams were added, confirm with Claude in Chrome (locally or
+- If HTML-block diagrams were added, confirm in Chrome (locally or
   on the live site) that they render, size themselves, and match the current
   theme — in both light and dark.
 - Grep the body for the placeholder marker and read the list back to the user so

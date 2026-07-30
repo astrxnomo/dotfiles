@@ -39,12 +39,13 @@ function Link-Config($target, $source) {
 }
 
 # Leaves Claude Code on the dotfiles baseline: only the superpowers plugin, only the
-# executor MCP, and only the skills symlinked from this repo. Computes everything that's
-# extra, shows it grouped, and asks for ONE single confirmation (default No) before deleting.
-# Doesn't touch project repos, dotfiles-managed symlinks, or claude.ai connectors
-# (Canva/Drive live on the account, not in ~/.claude.json).
+# executor + chrome-devtools MCPs, and only the skills symlinked from this repo. Computes
+# everything that's extra, shows it grouped, and asks for ONE single confirmation
+# (default No) before deleting. Doesn't touch project repos, dotfiles-managed symlinks,
+# or claude.ai connectors (Canva/Drive live on the account, not in ~/.claude.json).
 function Clean-ClaudeBaseline($repo) {
     $plugins = @(); $mcp = @(); $skills = @(); $other = @()
+    $keepMcp = @('executor', 'chrome-devtools')
 
     # 1. Plugins != superpowers (ignores inline/harness ones, which aren't uninstallable).
     foreach ($line in (claude plugin list 2>$null)) {
@@ -54,13 +55,13 @@ function Clean-ClaudeBaseline($repo) {
         }
     }
 
-    # 2. MCP servers != executor (read from ~/.claude.json; -AsHashtable for empty keys).
+    # 2. MCP servers outside the baseline (read from ~/.claude.json; -AsHashtable for empty keys).
     $claudeJson = "$env:USERPROFILE\.claude.json"
     if (Test-Path $claudeJson) {
         try {
             $cfg = Get-Content $claudeJson -Raw | ConvertFrom-Json -AsHashtable
             if ($cfg.mcpServers) {
-                foreach ($name in $cfg.mcpServers.Keys) { if ($name -ne 'executor') { $mcp += $name } }
+                foreach ($name in $cfg.mcpServers.Keys) { if ($name -notin $keepMcp) { $mcp += $name } }
             }
         } catch {}
     }
@@ -133,6 +134,16 @@ if (Get-Command claude -ErrorAction SilentlyContinue) {
         Write-Output "Executor MCP already configured"
     }
 
+    # Chrome DevTools: browser automation + debugging (navigate, click, screenshots,
+    # console/network, performance traces). Runs locally over stdio via npx (needs Node 22+)
+    # and drives its own dedicated Chrome profile, so it never touches the personal one.
+    if ((claude mcp list 2>$null) -notmatch "chrome-devtools") {
+        claude mcp add chrome-devtools --scope user -- npx -y chrome-devtools-mcp@latest
+        Write-Output "Added Chrome DevTools MCP"
+    } else {
+        Write-Output "Chrome DevTools MCP already configured"
+    }
+
     # Only plugin we keep is superpowers.
     if ((claude plugin list 2>$null) -notmatch "superpowers") {
         claude plugin install superpowers@claude-plugins-official
@@ -144,8 +155,8 @@ if (Get-Command claude -ErrorAction SilentlyContinue) {
     # linking skills, so it doesn't flag as "loose" the ones this script just symlinked).
     Clean-ClaudeBaseline $repo
 } else {
-    Write-Warning "claude CLI not found — skipping Executor MCP + superpowers plugin. Install Claude Code, then re-run this script."
+    Write-Warning "claude CLI not found — skipping Executor + Chrome DevTools MCPs and the superpowers plugin. Install Claude Code, then re-run this script."
 }
 
-Write-Output "`nDone. Make sure these are installed: WezTerm, Oh My Posh (winget install JanDeDobbeleer.OhMyPosh), JetBrainsMono Nerd Font, Claude Code."
+Write-Output "`nDone. Make sure these are installed: WezTerm, Oh My Posh (winget install JanDeDobbeleer.OhMyPosh), JetBrainsMono Nerd Font, Claude Code, Node 22+ (for the Chrome DevTools MCP), Google Chrome."
 Write-Output "After first run, open Claude Code and run /mcp to authorize Executor (Notion, Context7, Vercel connections)."
