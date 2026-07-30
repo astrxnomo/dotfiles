@@ -188,8 +188,32 @@ wezterm.on("format-tab-title", function(tab)
   return "  " .. folder .. "  "
 end)
 
+-- Ctrl+Alt+V: paste an image from the clipboard into terminal apps (e.g. Claude Code).
+-- WezTerm's PasteFrom only handles text, so we dump the clipboard image to a temp PNG
+-- and paste its path instead (Claude Code reads image files by path). Falls back to a
+-- normal text paste when the clipboard has no image.
+local paste_clipboard_image = wezterm.action_callback(function(window, pane)
+  local ps = table.concat({
+    "Add-Type -AssemblyName System.Windows.Forms,System.Drawing;",
+    "$img=[System.Windows.Forms.Clipboard]::GetImage();",
+    "if($img){",
+    "  $p=Join-Path $env:TEMP ('clip-'+(Get-Date -Format yyyyMMdd-HHmmss-fff)+'.png');",
+    "  $img.Save($p,[System.Drawing.Imaging.ImageFormat]::Png);",
+    "  [Console]::Out.Write($p)",
+    "}",
+  }, " ")
+  local ok, stdout = wezterm.run_child_process({ "pwsh.exe", "-NoProfile", "-Command", ps })
+  if ok and stdout and #stdout > 0 then
+    pane:paste(stdout)
+  else
+    window:perform_action(wezterm.action.PasteFrom "Clipboard", pane)
+  end
+end)
+
 config.keys = {
   { key = "F11", action = wezterm.action.ToggleFullScreen },
+
+  { key = "v", mods = "CTRL|ALT", action = paste_clipboard_image },
 
   { key = "s", mods = "ALT", action = wezterm.action.ShowLauncherArgs { flags = "FUZZY|WORKSPACES" } },
   { key = "n", mods = "ALT", action = wezterm.action.PromptInputLine {
