@@ -46,16 +46,17 @@ hand from the editor (`Ctrl+Shift+X` or the `zed: extensions` command palette).
 
 ## MCP and plugins
 
-Two MCP servers are part of the baseline. Neither lives in the repo (they're registered in `~/.claude.json`, which isn't symlinkable) — `install.ps1` adds both with `claude mcp add`.
+Three MCP servers are part of the baseline. None of them lives in the repo (they're registered in `~/.claude.json`, which isn't symlinkable) — `install.ps1` adds all three with `claude mcp add`.
 
 - **Executor** (`mcp__executor__execute`) — all external integrations (Notion, Context7, Supabase, Vercel) go through this single MCP server hosted at executor.sh, which centralizes connections and supports multiple accounts per integration (2 Notion workspaces, 2 Supabase organizations, etc.). Connections themselves are managed in the Executor dashboard, not in this repo. The first time, authorize it with `/mcp`.
 - **Chrome DevTools** (`mcp__chrome-devtools__*`) — browser automation and debugging: navigate, click/fill, snapshots and screenshots, console and network inspection, performance traces. Runs locally over stdio (`npx -y chrome-devtools-mcp@latest`, needs **Node 22+** and Google Chrome) and drives its **own dedicated Chrome profile**, so it never touches the personal one. The profile persists, so any sign-in only has to happen once. This replaces the Claude in Chrome extension.
+- **NotebookLM** (`mcp__notebooklm-mcp__*`) — NotebookLM notebooks as a long-context knowledge system: query a notebook (`notebook_query`), add sources (`source_add`), generate/download studio content, share, etc. Runs locally over stdio from PyPI (`uvx --from notebooklm-mcp-cli notebooklm-mcp`, needs [uv](https://docs.astral.sh/uv/): `winget install astral-sh.uv`), so nothing is installed permanently. Auth is **cookie-based per Google account**: run `uvx --from notebooklm-mcp-cli nlm login` once (it opens a browser). It exposes ~43 tools, so keep it **toggled off with `/mcp`** unless the project actually uses a notebook. It uses undocumented internal APIs, so it can break without notice.
 - **Plugins:** only **`superpowers`** is used. Plugins don't live in the repo (they're installed from the Claude Code store); `install.ps1` runs `claude plugin install superpowers@claude-plugins-official`.
-- **Cleanup:** at the end, `install.ps1` leaves Claude on this exact baseline. It detects whatever's extra on the other PC (plugins ≠ superpowers, MCP ≠ executor/chrome-devtools, loose skills in `~/.claude/skills`, and unmanaged `rules`/`settings.local.json`), shows the plan, and asks for **one single confirmation** (default No) before deleting. If there's nothing outside the baseline, it doesn't ask.
+- **Cleanup:** at the end, `install.ps1` leaves Claude on this exact baseline. It detects whatever's extra on the other PC (plugins ≠ superpowers, MCP ≠ executor/chrome-devtools/notebooklm-mcp, loose skills in `~/.claude/skills`, and unmanaged `rules`/`settings.local.json`), shows the plan, and asks for **one single confirmation** (default No) before deleting. If there's nothing outside the baseline, it doesn't ask.
 
 ## Installing on a new PC
 
-1. Install WezTerm, [Oh My Posh](https://ohmyposh.dev) (`winget install JanDeDobbeleer.OhMyPosh`), a Nerd Font (JetBrainsMono Nerd Font), Claude Code, [Zed](https://zed.dev), Node 22+ and Google Chrome (the last two for the Chrome DevTools MCP).
+1. Install WezTerm, [Oh My Posh](https://ohmyposh.dev) (`winget install JanDeDobbeleer.OhMyPosh`), a Nerd Font (JetBrainsMono Nerd Font), Claude Code, [Zed](https://zed.dev), Node 22+ and Google Chrome (the last two for the Chrome DevTools MCP), and [uv](https://docs.astral.sh/uv/) (`winget install astral-sh.uv`, for the NotebookLM MCP).
 2. Enable **Developer Mode** (Settings > Privacy & security > For developers) so symlinks can be created without admin.
 3. Clone this repo and run:
 
@@ -66,4 +67,5 @@ Two MCP servers are part of the baseline. Neither lives in the repo (they're reg
 
 4. Restart WezTerm / open a new PowerShell tab.
 5. Open Claude Code and run `/mcp` to authorize Executor (Notion, Context7, Supabase, Vercel connections).
-6. Open Zed and install the extensions listed in `zed/extensions.md` by hand.
+6. Authenticate NotebookLM once: `uvx --from notebooklm-mcp-cli nlm login`.
+7. Open Zed and install the extensions listed in `zed/extensions.md` by hand.
