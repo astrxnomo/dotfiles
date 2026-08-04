@@ -137,8 +137,11 @@ if (Get-Command claude -ErrorAction SilentlyContinue) {
     # Chrome DevTools: browser automation + debugging (navigate, click, screenshots,
     # console/network, performance traces). Runs locally over stdio via npx (needs Node 22+)
     # and drives its own dedicated Chrome profile, so it never touches the personal one.
+    # NOTE: the stdio separator must be quoted ('--'). `claude` resolves to claude.ps1, and
+    # PowerShell swallows a bare -- as its end-of-parameters token, so the CLI would then
+    # parse the command's own flags (-y, --from) as claude options and fail.
     if ((claude mcp list 2>$null) -notmatch "chrome-devtools") {
-        claude mcp add chrome-devtools --scope user -- npx -y chrome-devtools-mcp@latest
+        claude mcp add chrome-devtools --scope user '--' npx -y chrome-devtools-mcp@latest
         Write-Output "Added Chrome DevTools MCP"
     } else {
         Write-Output "Chrome DevTools MCP already configured"
@@ -150,7 +153,7 @@ if (Get-Command claude -ErrorAction SilentlyContinue) {
     # `uvx --from notebooklm-mcp-cli nlm login` once. Exposes ~43 tools, so keep it toggled
     # off with /mcp when not working on a notebook-backed project.
     if ((claude mcp list 2>$null) -notmatch "notebooklm-mcp") {
-        claude mcp add notebooklm-mcp --scope user -- uvx --from notebooklm-mcp-cli notebooklm-mcp
+        claude mcp add notebooklm-mcp --scope user '--' uvx --from notebooklm-mcp-cli notebooklm-mcp
         Write-Output "Added NotebookLM MCP (run 'uvx --from notebooklm-mcp-cli nlm login' to authenticate)"
     } else {
         Write-Output "NotebookLM MCP already configured"
