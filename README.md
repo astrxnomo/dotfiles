@@ -16,13 +16,9 @@ Personal configuration files, symlinked from here to keep them in sync across ma
 ### Personal skills
 
 - `commit-and-push` — git add + version bump + commit + push
-- `fix-build` — fix the build and linting errors
 - `mcp-integrations` — Notion, Context7, Supabase, Vercel through Executor (Notion and Supabase have 2 accounts each: `felipegiraldo` and `centrodeprototipado`)
-- `project-hub` — manage projects/tasks in the Notion "Project Hub" (workspace `felipegiraldo`)
-- `browser-verify` — test a feature in a real browser with the Chrome DevTools MCP
-- `felipego-projects` — publish/update felipego.com portfolio projects in Notion
-- `activity-report` — draft weekly/monthly activity reports for the university role, off by default (invoked manually)
-- `improve` — survey a codebase as a senior advisor and produce implementation plans for other agents to execute (read-only, from [shadcn/improve](https://skills.sh/shadcn/improve))
+- `new-project` — bootstrap a new project with a layered architecture, versions verified against the live docs; off by default (invoke manually with `/new-project`)
+- `felipego-projects` — publish/update felipego.com portfolio projects in Notion; off by default
 
 Check each skill's `SKILL.md` for the current, authoritative on/off state and
 scope — the list above is descriptive, not the source of truth; `claude/settings.json`'s `skillOverrides` is.
