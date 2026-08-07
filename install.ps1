@@ -38,8 +38,8 @@ function Link-Config($target, $source) {
     Write-Output "Linked $target -> $source"
 }
 
-# Leaves Claude Code on the dotfiles baseline: only the superpowers and skill-creator
-# plugins, only the
+# Leaves Claude Code on the dotfiles baseline: only the skill-creator
+# plugin, only the
 # executor + chrome-devtools + notebooklm-mcp MCPs, and only the skills symlinked from this repo. Computes
 # everything that's extra, shows it grouped, and asks for ONE single confirmation
 # (default No) before deleting. Doesn't touch project repos, dotfiles-managed symlinks,
@@ -47,7 +47,7 @@ function Link-Config($target, $source) {
 function Clean-ClaudeBaseline($repo) {
     $plugins = @(); $mcp = @(); $skills = @(); $other = @()
     $keepMcp = @('executor', 'chrome-devtools', 'notebooklm-mcp')
-    $keepPlugins = @('superpowers', 'skill-creator')
+    $keepPlugins = @('skill-creator')
 
     # 1. Plugins outside the baseline (ignores inline/harness ones, which aren't
     # uninstallable). A plugin installed in more than one scope is listed once per
@@ -165,18 +165,18 @@ if (Get-Command claude -ErrorAction SilentlyContinue) {
         Write-Output "NotebookLM MCP already configured"
     }
 
-    # Only plugin we keep is superpowers.
-    if ((claude plugin list 2>$null) -notmatch "superpowers") {
-        claude plugin install superpowers@claude-plugins-official
+    # Only plugin we keep is skill-creator.
+    if ((claude plugin list 2>$null) -notmatch "skill-creator") {
+        claude plugin install skill-creator@claude-plugins-official
     } else {
-        Write-Output "superpowers plugin already installed"
+        Write-Output "skill-creator plugin already installed"
     }
 
     # Cleanup: removes whatever's extra relative to the baseline (runs after
     # linking skills, so it doesn't flag as "loose" the ones this script just symlinked).
     Clean-ClaudeBaseline $repo
 } else {
-    Write-Warning "claude CLI not found — skipping Executor + Chrome DevTools + NotebookLM MCPs and the superpowers plugin. Install Claude Code, then re-run this script."
+    Write-Warning "claude CLI not found — skipping Executor + Chrome DevTools + NotebookLM MCPs and the skill-creator plugin. Install Claude Code, then re-run this script."
 }
 
 Write-Output "`nDone. Make sure these are installed: WezTerm, Oh My Posh (winget install JanDeDobbeleer.OhMyPosh), JetBrainsMono Nerd Font, Claude Code, Node 22+ (for the Chrome DevTools MCP), uv (winget install astral-sh.uv, for the NotebookLM MCP), Google Chrome."

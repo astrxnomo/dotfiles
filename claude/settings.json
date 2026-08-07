@@ -4,8 +4,10 @@
     "pr": ""
   },
   "permissions": {
-    "defaultMode": "auto",
-    "deny": ["mcp__claude-in-chrome"]
+    "deny": [
+      "mcp__claude-in-chrome"
+    ],
+    "defaultMode": "auto"
   },
   "model": "opus",
   "skillOverrides": {
@@ -47,7 +49,6 @@
   },
   "enabledPlugins": {
     "cowork-plugin-management@inline": false,
-    "superpowers@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true
   },
   "language": "Español",
