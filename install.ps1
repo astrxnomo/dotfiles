@@ -38,7 +38,8 @@ function Link-Config($target, $source) {
     Write-Output "Linked $target -> $source"
 }
 
-# Leaves Claude Code on the dotfiles baseline: only the superpowers plugin, only the
+# Leaves Claude Code on the dotfiles baseline: only the superpowers and skill-creator
+# plugins, only the
 # executor + chrome-devtools + notebooklm-mcp MCPs, and only the skills symlinked from this repo. Computes
 # everything that's extra, shows it grouped, and asks for ONE single confirmation
 # (default No) before deleting. Doesn't touch project repos, dotfiles-managed symlinks,
@@ -46,14 +47,19 @@ function Link-Config($target, $source) {
 function Clean-ClaudeBaseline($repo) {
     $plugins = @(); $mcp = @(); $skills = @(); $other = @()
     $keepMcp = @('executor', 'chrome-devtools', 'notebooklm-mcp')
+    $keepPlugins = @('superpowers', 'skill-creator')
 
-    # 1. Plugins != superpowers (ignores inline/harness ones, which aren't uninstallable).
+    # 1. Plugins outside the baseline (ignores inline/harness ones, which aren't
+    # uninstallable). A plugin installed in more than one scope is listed once per
+    # scope, so dedupe: `claude plugin uninstall` takes the id, not the scope.
     foreach ($line in (claude plugin list 2>$null)) {
         if ($line -match '([\w.-]+@[\w.-]+)') {
             $id = $Matches[1]
-            if ($id -notmatch '^superpowers@' -and $id -notmatch '@inline$') { $plugins += $id }
+            $name = $id.Split('@')[0]
+            if ($name -notin $keepPlugins -and $id -notmatch '@inline$') { $plugins += $id }
         }
     }
+    $plugins = @($plugins | Select-Object -Unique)
 
     # 2. MCP servers outside the baseline (read from ~/.claude.json; -AsHashtable for empty keys).
     $claudeJson = "$env:USERPROFILE\.claude.json"

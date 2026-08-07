@@ -4,13 +4,14 @@
     "pr": ""
   },
   "permissions": {
-    "defaultMode": "auto"
+    "defaultMode": "auto",
+    "deny": ["mcp__claude-in-chrome"]
   },
   "model": "opus",
   "skillOverrides": {
     "felipego-projects": "off",
-    "activity-report": "off",
-    "project-hub": "off"
+    "new-project": "off",
+    "claude-in-chrome": "off"
   },
   "hooks": {
     "Notification": [
@@ -46,7 +47,8 @@
   },
   "enabledPlugins": {
     "cowork-plugin-management@inline": false,
-    "superpowers@claude-plugins-official": true
+    "superpowers@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true
   },
   "language": "Español",
   "effortLevel": "medium",
