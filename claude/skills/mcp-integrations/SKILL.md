@@ -9,8 +9,9 @@ All external integrations go **through Executor** (`mcp__executor__execute`), ne
 
 ## Accounts
 
-Some integrations (e.g. Notion, Supabase) have more than one connected account/organization, distinguished by a `.user.<name>` suffix on the namespace (e.g. `notion_mcp.user.felipegiraldo`, `notion_mcp.user.centrodeprototipado`).
+Several integrations have more than one connected account/organization, distinguished by a `.user.<name>` suffix on the namespace (e.g. `notion_mcp.user.felipegiraldo`, `notion_mcp.user.centrodeprototipado`). Which ones are split changes over time, so check with `tools.search` rather than assuming a given integration has only one.
 
+- `felipegiraldo` is the default; `centrodeprototipado` is only for that project.
 - Use the account the user tells you to use — it's the source of truth.
 - If the user didn't specify and it isn't obvious, **ask before writing** (reading from the wrong account is harmless; creating/editing, migrations, deploys, or branches are not).
 

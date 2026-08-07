@@ -1,8 +1,8 @@
 # Global instructions
 
 - Don't add `Co-Authored-By: Claude ...` to git commit messages.
-- External integrations (Notion, Context7, Vercel, Supabase, …) always go **through Executor** (`mcp__executor__execute`), never a direct MCP or the public API. Discover tools with `tools.search`; see the `mcp-integrations` skill for the details. Notion and Supabase have 2 accounts each: `felipegiraldo` (default) and `centrodeprototipado` (only for that project) — use whichever the task specifies.
-- There are personal skills in `~/.claude/skills` for recurring tasks — check them when the task's name isn't obvious from the task itself.
+- External integrations (Notion, Context7, Vercel, Supabase, …) always go **through Executor** (`mcp__executor__execute`), never a direct MCP or the public API. Discover tools with `tools.search`; see the `mcp-integrations` skill for the details, including the integrations that have more than one connected account: use the one the task specifies, and ask before writing if it isn't clear.
+- There are personal skills in `~/.claude/skills` for recurring tasks. Check them when the task's name isn't obvious from the task itself. Some are off by default in `skillOverrides` and so don't show up in the available list; they're invoked by name (`/new-project`).
 
 ## Working style
 
